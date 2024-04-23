@@ -1,0 +1,54 @@
+.myButton {
+    width: 200px;
+    height: 55px;
+    border-radius: 55px;
+    font-size: 20px;
+    font-weight: medium;
+    cursor: pointer;
+}
+
+.blue {
+    background-color: #49C8C8;
+    color: #FFFFFF;
+    filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.6));
+    border: none;
+    transition: filter .3s ease-in-out,
+        background-color .5s ease-in-out;
+}
+
+.blue:hover {
+    border: none;
+    background-color: #149090;
+}
+
+.blue:focus {
+    border: none;
+    background-color: #149090;
+}
+
+.blue:active {
+    border: none;
+    background-color: #49C8C8;
+    filter: none;
+}
+
+.empty {
+    border: 2px solid #49C8C8;
+    background: none;
+    color: #49C8C8;
+    transition: border .5s ease-in-out,
+        background-color .5s ease-in-out,
+        color .5s ease-in-out;
+}
+
+.empty:focus,
+.empty:hover {
+    border-color: #149090;
+    color: #149090;
+}
+
+.empty:active {
+    border-color: #49C8C8;
+    background-color: #49C8C8;
+    color: #FFFFFF;
+}

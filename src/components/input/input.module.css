@@ -1,0 +1,77 @@
+:focus-visible {
+    outline: none;
+}
+
+.myInput {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    color: #828282;
+    font-size: 16px;
+    line-height: 164%;
+    transition: color 0.3s ease-in-out;
+    margin-bottom: 20px;
+}
+
+.myInput input {
+    border: none;
+    border-bottom: 2px solid #BDBDBD;
+    width: 350px;
+    transition: border-color 0.5s ease-in-out;
+    padding: 8px 0;
+
+}
+
+.myInput input::placeholder {
+    color: #BDBDBD;
+    font-size: 16px;
+    line-height: 164%;
+}
+
+.myInput:hover,
+.myInput input:hover {
+    color: #149090;
+    border-color: #149090;
+}
+
+.myInput input:active~.myInput,
+.myInput:active {
+    color: #69C8C8;
+}
+
+.myInput input:active {
+    border-color: #69C8C8;
+}
+
+.myInput input:focus~.myInput,
+.myInput:focus {
+    color: #149090;
+}
+
+.error input {
+    border-color: #F02222;
+}
+
+.error {
+    color: #F02222;
+}
+
+.invisible {
+    opacity: 0;
+}
+
+.visible {
+    opacity: 1;
+    color: #F02222;
+    font-size: 12px;
+    line-height: 100%;
+}
+
+.myInput .big {
+    width: 650px;
+}
+
+
+.myInput .small {
+    width: 300px;
+}

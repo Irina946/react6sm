@@ -1,0 +1,41 @@
+.entarnceContainer {
+    display: flex;
+    width: 30vw;
+    height: auto;
+    background-color: #FFFFFF;
+    filter: drop-shadow(4px 0px 20px rgba(0, 0, 0, 0.25));
+    padding: 3vh 1vw;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.inputsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: space-between;
+    height: 160px;
+    margin-bottom: 45px;
+}
+
+.header {
+    font-size: 40px;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.description {
+    color: #828282;
+    font-size: 20px;
+    width: 450px;
+    margin-bottom: 40px;
+    line-height: 180%;
+    font-weight: 100;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 495px;
+}

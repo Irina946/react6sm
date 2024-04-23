@@ -1,0 +1,87 @@
+.creatingProfileContainer {
+    display: flex;
+    width: 700px;
+    height: auto;
+    background-color: #FFFFFF;
+    filter: drop-shadow(4px 0px 20px rgba(0, 0, 0, 0.25));
+    padding: 2.5vh 4.4vw;
+    text-align: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.imagesContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin: 20px -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+}
+
+.photoProfile {
+    width: 135px;
+    height: 135px;
+    border-radius: 6px;
+    background-color: rgba(217, 217, 217, 0.45);
+}
+
+.cover {
+    display: flex;
+    border: 2px solid #BDBDBD;
+    border-radius: 6px;
+    width: 500px;
+    height: 135px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+    color: #828282;
+}
+
+.hrefContainer {
+    color: #49C8C8;
+    margin-bottom: 20px;
+}
+
+.hrefContainer>a {
+    cursor: pointer;
+}
+
+.inputsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 495px;
+}
+
+.sex {
+    display: flex;
+    width: 95px;
+    justify-content: space-between;
+}
+
+.textArea {
+    width: 650px;
+    height: 105px;
+    border-radius: 5px;
+    border: 2px solid #BDBDBD;
+    resize: none;
+}
+
+.textAreaLabel {
+    display: flex;
+    color: #828282;
+    text-align: start;
+}
+
+.optional {
+    color: #BDBDBD;
+}

@@ -1,0 +1,116 @@
+.selectWrapper {
+  position: relative;
+  border: none;
+  width: 300px;
+  font-size: 16px;
+  line-height: 164%;
+  margin-bottom: 20px;
+}
+
+.small {
+  width: 205px;
+}
+
+.label {
+  color: #828282;
+  font-size: 16px;
+  line-height: 164%;
+  align-items: start;
+  text-align: start;
+}
+
+.arrow {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transition: transform 0.2s ease-in-out, margin-top 0.2s ease-in-out;
+  margin-top: -10px;
+}
+
+.placeholder {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 30px;
+  padding: 5px;
+  padding-left: 0;
+  cursor: pointer;
+  border: none;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 164%;
+  color: #BDBDBD;
+  background: rgb(255, 255, 255);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.placeholder[data-status="default"] {
+  border-bottom: 2px solid #BDBDBD;
+}
+
+.placeholder[data-status="invalid"] {
+  border-bottom: 2px solid rgba(255, 0, 0, 1);
+}
+
+.placeholder[data-selected="true"] {
+  color: #000000;
+}
+
+.selectWrapper[data-is-active="true"] .arrow {
+  transform: rotate(180deg);
+  margin-top: -15px;
+}
+
+.selectWrapper[data-is-active="true"] .placeholder {
+  border-bottom: 2px solid #69C8C8;
+}
+
+.selectWrapper:not([data-is-active="true"]) .placeholder:not([data-status="invalid"]):hover {
+  border-bottom: 2px solid #BDBDBD;
+}
+
+.select {
+  display: grid;
+  position: absolute;
+  list-style: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.option {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 30px;
+  padding: 5px;
+  border: 1px;
+  cursor: pointer;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 164%;
+  background-color: rgba(255, 255, 255, 1);
+  color: rgb(0, 0, 0);
+}
+
+.option[aria-selected="true"] {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.option:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.selectWrapper[data-mode="cells"] .select {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.selectWrapper[data-mode="cells"] .option {
+  justify-content: center;
+}
