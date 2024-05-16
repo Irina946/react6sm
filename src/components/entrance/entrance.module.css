@@ -37,5 +37,23 @@
 .buttonContainer {
     display: flex;
     justify-content: space-between;
-    width: 495px;
+    width: calc(495px - 4vw);
+}
+
+.arrowBack {
+    position: absolute;
+    left: 25px;
+    top: 25px;
+    background: none;
+    border: none;
+    background-image: url(/src/image/ArrowLeft.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 20px;
+    width: 40px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.arrowBack:hover {
+    transform: translateX(-10px);
 }

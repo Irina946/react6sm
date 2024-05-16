@@ -5,30 +5,21 @@ interface InputProps {
   id: string
   label: string
   placeholder: string
-  error?: boolean
-  errorMessage?: string
   size?: 'big' | 'small'
   type: string
-  view?: 'main' 
+  view?: string
 }
 
 const Input = (props: InputProps): JSX.Element => {
-  let error = '';
-  let stylesErrorMessage = styles.invisible;
   const typeSize = props.size === 'big' ? styles.big :
     props.size === 'small' ? styles.small : '';
-  const typeView = props.view === 'main' ? styles.inputMain : '';
-  if (props.error) {
-    error = styles.error
-    stylesErrorMessage = styles.visible
-  }
+  const typeView = props.view === 'main' ? styles.inputMain : ''
   return (
     <label
       className=
       {
         clsx(
           styles.myInput,
-          error,
           typeView
         )
       }
@@ -37,12 +28,10 @@ const Input = (props: InputProps): JSX.Element => {
       <input
         id={props.id}
         placeholder={props.placeholder}
-        className={clsx(error, typeSize)}
+        className={clsx(typeSize)}
         type={props.type}
       />
-      <div className={stylesErrorMessage}>{props.errorMessage}</div>
     </label>
-
   );
 };
 

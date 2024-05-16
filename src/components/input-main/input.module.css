@@ -75,28 +75,3 @@
 .myInput .small {
     width: 300px;
 }
-
-.inputMain {
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-    transition: color 0.3s ease-in-out;
-    color: #FFFFFF;
-    font-size: 18px;
-    height: 30px;
-}
-
-.inputMain input {
-    border: none;
-    border-bottom: 1px solid #FFFFFF;
-    width: 200px;
-    transition: border-color 0.5s ease-in-out;
-    padding: 0;
-    background: none;
-    color: #FFFFFF;
-}
-
-.inputMain input::placeholder {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 14px;
-}

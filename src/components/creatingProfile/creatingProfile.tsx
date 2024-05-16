@@ -4,6 +4,8 @@ import DropDown from '../drop-down/drop-down';
 import Input from '../input/input';
 import styles from './creatingProfile.module.css'
 import Checkbox from '../checkbox/checkbox';
+import { Link } from 'react-router-dom';
+import data from '../../data.json';
 
 
 
@@ -23,99 +25,102 @@ const CreatingProfileComponent = (): JSX.Element => {
     setExperienceValue(value)
   }
 
-  const activeData = [
-    {
-      "title": "Фотограф",
-      "value": "Photo"
-    },
-    {
-      "title": "Видеограф",
-      "value": "Video"
-    },
-    {
-      "title": "Модель",
-      "value": "Model"
-    }
-  ]
+  const dataSet = data.models
+  const [activeData, specializationData, experienceData, ageData] = [...dataSet]
 
-  const specializationData = [
-    {
-      "title": "Студийная",
-      "value": "Studio"
-    },
-    {
-      "title": "Уличная",
-      "value": "Street"
-    },
-    {
-      "title": "Детская",
-      "value": "Childish"
-    },
-    {
-      "title": "Свадебная",
-      "value": "Wedding"
-    },
-    {
-      "title": "Food",
-      "value": "Food"
-    },
-    {
-      "title": "Предметная",
-      "value": "Subject"
-    },
-    {
-      "title": "Fashion",
-      "value": "Fashion"
-    },
-    {
-      "title": "Архитектурная",
-      "value": "Architectural"
-    },
-    {
-      "title": "Репортажная",
-      "value": "Reportage"
-    },
-    {
-      "title": "Рекламная",
-      "value": "Advertising"
-    },
-    {
-      "title": "Ню",
-      "value": "Nu"
-    },
-    {
-      "title": "Life-style",
-      "value": "Life-style"
-    }
-  ]
+  // const activeData = [
+  //   {
+  //     "title": "Фотограф",
+  //     "value": "Photo"
+  //   },
+  //   {
+  //     "title": "Видеограф",
+  //     "value": "Video"
+  //   },
+  //   {
+  //     "title": "Модель",
+  //     "value": "Model"
+  //   }
+  // ]
 
-  const experienceData = [
-    {
-      "title": "0-1",
-      "value": "Beginner"
-    },
-    {
-      "title": "1-3",
-      "value": "Beginner-Intermediate"
-    },
-    {
-      "title": "3-5",
-      "value": "Intermediate"
-    },
-    {
-      "title": "5-10",
-      "value": "Intermediate-Advanced"
-    },
-    {
-      "title": "Более 10",
-      "value": "Advanced"
-    }
-  ]
+  // const specializationData = [
+  //   {
+  //     "title": "Студийная",
+  //     "value": "Studio"
+  //   },
+  //   {
+  //     "title": "Уличная",
+  //     "value": "Street"
+  //   },
+  //   {
+  //     "title": "Детская",
+  //     "value": "Childish"
+  //   },
+  //   {
+  //     "title": "Свадебная",
+  //     "value": "Wedding"
+  //   },
+  //   {
+  //     "title": "Food",
+  //     "value": "Food"
+  //   },
+  //   {
+  //     "title": "Предметная",
+  //     "value": "Subject"
+  //   },
+  //   {
+  //     "title": "Fashion",
+  //     "value": "Fashion"
+  //   },
+  //   {
+  //     "title": "Архитектурная",
+  //     "value": "Architectural"
+  //   },
+  //   {
+  //     "title": "Репортажная",
+  //     "value": "Reportage"
+  //   },
+  //   {
+  //     "title": "Рекламная",
+  //     "value": "Advertising"
+  //   },
+  //   {
+  //     "title": "Ню",
+  //     "value": "Nu"
+  //   },
+  //   {
+  //     "title": "Life-style",
+  //     "value": "Life-style"
+  //   }
+  // ]
+
+  // const experienceData = [
+  //   {
+  //     "title": "0-1",
+  //     "value": "Beginner"
+  //   },
+  //   {
+  //     "title": "1-3",
+  //     "value": "Beginner-Intermediate"
+  //   },
+  //   {
+  //     "title": "3-5",
+  //     "value": "Intermediate"
+  //   },
+  //   {
+  //     "title": "5-10",
+  //     "value": "Intermediate-Advanced"
+  //   },
+  //   {
+  //     "title": "Более 10",
+  //     "value": "Advanced"
+  //   }
+  // ]
 
 
-  const selectedActive = activeData.find((item) => item.value === active)
-  const selectedSpecialization = specializationData.find((item) => item.value === specialization)
-  const selectedExperience = experienceData.find((item) => item.value === experience)
+  const selectedActive = activeData.content.find((item) => item.value === active)
+  const selectedSpecialization = specializationData.content.find((item) => item.value === specialization)
+  const selectedExperience = experienceData.content.find((item) => item.value === experience)
 
   return (
     <div
@@ -165,14 +170,14 @@ const CreatingProfileComponent = (): JSX.Element => {
           type='date'
         />
         <DropDown
-          options={activeData}
+          options={activeData.content}
           selected={selectedActive || null}
           onChange={handleActiveSelect}
           placeholder='Выберите деятельность'
           label='Деятельность'
         />
         <DropDown
-          options={specializationData}
+          options={specializationData.content}
           selected={selectedSpecialization || null}
           onChange={handleSpecializationSelect}
           placeholder='Выберите специализацию'
@@ -190,7 +195,7 @@ const CreatingProfileComponent = (): JSX.Element => {
           <Checkbox title='Жен' id='woman' />
         </div>
         <DropDown
-          options={experienceData}
+          options={experienceData.content}
           selected={selectedExperience || null}
           onChange={handleExperienceSelect}
           placeholder='Опыт(лет)'
@@ -214,10 +219,12 @@ const CreatingProfileComponent = (): JSX.Element => {
           typeButton='blue'
           title='Регистрация'
         />
-        <Button
-          typeButton='empty'
-          title='Отмена'
-        />
+        <Link to='..'>
+          <Button
+            typeButton='empty'
+            title='Отмена'
+          />
+        </Link>
       </div>
     </div>
 

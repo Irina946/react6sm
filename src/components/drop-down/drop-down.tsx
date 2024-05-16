@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, MouseEventHandler } from 'react';
 import styles from './drop-down.module.css'
 import arrowDown from '../../image/arrow.png'
+import arrowMain from '../../image/arrowMain.png'
 import clsx from 'clsx';
 
 type Option = {
@@ -17,7 +18,8 @@ type SelectProps = {
   onChange?: (selected: Option['value']) => void;
   onClose?: () => void;
   label: string;
-  size?: 'small'
+  size?: 'small';
+  view?: 'main'
 };
 
 type OptionProps = {
@@ -79,7 +81,8 @@ const DropDown = (props: SelectProps): JSX.Element => {
     onChange,
     onClose,
     label,
-    size
+    size,
+    view
   } = props
   const [isOpen, setIsOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -88,7 +91,8 @@ const DropDown = (props: SelectProps): JSX.Element => {
   if (size === 'small') {
     small = styles.small
   }
-
+  const typeView = view === 'main' ? arrowMain : arrowDown;
+  const color = view === 'main' ? styles.colorMain : '';
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
       const { target } = event;
@@ -130,7 +134,7 @@ const DropDown = (props: SelectProps): JSX.Element => {
   };
 
   return (
-    <div className={styles.label}>
+    <div className={clsx(styles.label, color)}>
       {label}
       <div
       className={clsx(styles.selectWrapper, small)}
@@ -139,10 +143,10 @@ const DropDown = (props: SelectProps): JSX.Element => {
       data-mode={mode}
     >
       <div className={styles.arrow}>
-        <img src={arrowDown} />
+        <img src={typeView} />
       </div>
       <div
-        className={styles.placeholder}
+        className={clsx(styles.placeholder, color)}
         data-status={status}
         data-selected={!!selected?.value}
         onClick={handlePlaceHolderClick}

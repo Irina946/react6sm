@@ -1,3 +1,4 @@
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../button/button';
 import Input from '../input/input';
 import styles from './registration.module.css'
@@ -5,6 +6,7 @@ import styles from './registration.module.css'
 
 
 const RegistartionComponent = (): JSX.Element => {
+  const navigate = useNavigate();
   return (
     <div
       className={styles.registrationContainer}
@@ -43,12 +45,12 @@ const RegistartionComponent = (): JSX.Element => {
           type='password'
         />
         <div
-        className={styles.text}
-      >
-        Все поля обязательны для заполнения
+          className={styles.text}
+        >
+          Все поля обязательны для заполнения
+        </div>
       </div>
-      </div>
-      
+
       <div
         className={styles.buttonContainer}
       >
@@ -56,10 +58,12 @@ const RegistartionComponent = (): JSX.Element => {
           typeButton='blue'
           title='Регистрация'
         />
-        <Button
-          typeButton='empty'
-          title='Отмена'
-        />
+        <Link to='' onClick={() => navigate(-1)}>
+          <Button
+            typeButton='empty'
+            title='Отмена'
+          />
+          </Link>
       </div>
     </div>
 

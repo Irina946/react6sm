@@ -1,13 +1,16 @@
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '../button/button';
 import Input from '../input/input';
 import styles from './entrance.module.css'
 
 
 const EntarnceComponent = (): JSX.Element => {
+  const navigate = useNavigate()
   return (
     <div
       className={styles.entarnceContainer}
     >
+      <button className={styles.arrowBack} onClick={() => (navigate(-1))}></button>
       <h1 className={styles.header}>Вход</h1>
       <div
         className={styles.description}
@@ -33,14 +36,18 @@ const EntarnceComponent = (): JSX.Element => {
       <div
         className={styles.buttonContainer}
       >
-        <Button
-          typeButton='blue'
-          title='Регистрация'
-        />
+        <Link to='/registration'>
+          <Button
+            typeButton='blue'
+            title='Регистрация'
+          />
+        </Link>
+        <Link to='/customerFeed'>
         <Button
           typeButton='empty'
           title='Вход'
         />
+        </Link>
       </div>
     </div>
 

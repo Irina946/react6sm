@@ -1,0 +1,23 @@
+.containerSearchOutside {
+    background-image: url(../../image/backgroundFeedCustmers.png);
+    background-repeat: no-repeat;
+    background-size:100% 100%;
+    background-position: 0px 0px;
+    height: auto;
+    width: calc(100vw - 517px);
+    padding: 140px 250px 70px 250px;
+    font-size: 30px;
+    font-weight: 300;
+    color: #FFFFFF;
+}
+
+.containerSearchInside {
+    width: 62.5vw;
+    height: 190px;
+    background-color: rgba(73, 200, 200, 0.5);
+    margin-top: 20px;
+    padding: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
