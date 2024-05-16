@@ -11,8 +11,15 @@
 }
 
 .leftContainer, .rightContainer {
+    font-family: 'Courier New', Courier, monospace;
     color: white;
-    font-size: 64px;
+    font-size: 48px;
     font-weight: 100;
+    line-height: normal;
+    width: 45%;
+    text-align: center;
+}
 
+.description {
+    margin-bottom: 20px;
 }

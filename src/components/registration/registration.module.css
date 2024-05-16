@@ -44,6 +44,6 @@
 .buttonContainer {
     display: flex;
     justify-content: space-between;
-    width: 495px;
+    width: calc(495px - 4vw);
     margin-bottom: 10px;
 }

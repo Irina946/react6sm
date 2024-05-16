@@ -5,6 +5,7 @@
     font-size: 20px;
     font-weight: medium;
     cursor: pointer;
+    user-select: none;
 }
 
 .blue {
@@ -52,3 +53,26 @@
     background-color: #49C8C8;
     color: #FFFFFF;
 }
+
+.main {
+    width: auto;
+    height: auto;
+    font-size: 26px;
+    border-radius: 0px;
+    background: none;
+    border: 2px solid #FFFFFF;
+    color: #FFFFFF;
+    padding: 37px 32px;
+}
+
+.main:hover, .main:focus {
+    border-color: #149090;
+    color: #149090;
+}
+
+.main:active {
+    border-color: #49C8C8;
+    color: #49C8C8;
+}
+
+

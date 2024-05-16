@@ -14,7 +14,7 @@
 .label {
   color: #828282;
   font-size: 16px;
-  line-height: 164%;
+  line-height: 100%;
   align-items: start;
   text-align: start;
 }
@@ -113,4 +113,15 @@
 
 .selectWrapper[data-mode="cells"] .option {
   justify-content: center;
+}
+
+.colorMain {
+  background: none;
+  color: #FFFFFF;
+}
+
+.colorMain .placeholder[data-status="default"]{
+  border-bottom: 1px solid #FFFFFF;
+  color: #FFFFFF;
+  font-size: 14px;
 }
