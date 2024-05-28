@@ -1,0 +1,11 @@
+.specializationContainer {
+    border: 2px solid #49C8C8;
+    color: #49C8C8;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 5px 15px;
+    width: auto;
+    height: auto;
+    border-radius: 4px;
+    margin-left: 15px;
+}

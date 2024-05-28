@@ -3,9 +3,10 @@ import Button from '../button/button';
 import DropDown from '../drop-down/drop-down';
 import Input from '../input/input';
 import styles from './creatingProfile.module.css'
-import Checkbox from '../checkbox/checkbox';
+import { Radio } from '../checkbox/checkbox';
 import { Link } from 'react-router-dom';
 import data from '../../data.json';
+import { TUserSchema, sendUser } from '../../transport';
 
 
 
@@ -26,101 +27,56 @@ const CreatingProfileComponent = (): JSX.Element => {
   }
 
   const dataSet = data.models
-  const [activeData, specializationData, experienceData, ageData] = [...dataSet]
+  const [activeData, specializationData, experienceData] = [...dataSet]
 
-  // const activeData = [
-  //   {
-  //     "title": "Фотограф",
-  //     "value": "Photo"
-  //   },
-  //   {
-  //     "title": "Видеограф",
-  //     "value": "Video"
-  //   },
-  //   {
-  //     "title": "Модель",
-  //     "value": "Model"
-  //   }
-  // ]
-
-  // const specializationData = [
-  //   {
-  //     "title": "Студийная",
-  //     "value": "Studio"
-  //   },
-  //   {
-  //     "title": "Уличная",
-  //     "value": "Street"
-  //   },
-  //   {
-  //     "title": "Детская",
-  //     "value": "Childish"
-  //   },
-  //   {
-  //     "title": "Свадебная",
-  //     "value": "Wedding"
-  //   },
-  //   {
-  //     "title": "Food",
-  //     "value": "Food"
-  //   },
-  //   {
-  //     "title": "Предметная",
-  //     "value": "Subject"
-  //   },
-  //   {
-  //     "title": "Fashion",
-  //     "value": "Fashion"
-  //   },
-  //   {
-  //     "title": "Архитектурная",
-  //     "value": "Architectural"
-  //   },
-  //   {
-  //     "title": "Репортажная",
-  //     "value": "Reportage"
-  //   },
-  //   {
-  //     "title": "Рекламная",
-  //     "value": "Advertising"
-  //   },
-  //   {
-  //     "title": "Ню",
-  //     "value": "Nu"
-  //   },
-  //   {
-  //     "title": "Life-style",
-  //     "value": "Life-style"
-  //   }
-  // ]
-
-  // const experienceData = [
-  //   {
-  //     "title": "0-1",
-  //     "value": "Beginner"
-  //   },
-  //   {
-  //     "title": "1-3",
-  //     "value": "Beginner-Intermediate"
-  //   },
-  //   {
-  //     "title": "3-5",
-  //     "value": "Intermediate"
-  //   },
-  //   {
-  //     "title": "5-10",
-  //     "value": "Intermediate-Advanced"
-  //   },
-  //   {
-  //     "title": "Более 10",
-  //     "value": "Advanced"
-  //   }
-  // ]
 
 
   const selectedActive = activeData.content.find((item) => item.value === active)
   const selectedSpecialization = specializationData.content.find((item) => item.value === specialization)
   const selectedExperience = experienceData.content.find((item) => item.value === experience)
+
+  const [theme, setTheme] = useState({ man: false, woman: false })
+
+  const onChangeTheme = (e) => {
+    const { name } = e.target
+    if (name === 'man') {
+      setTheme({ man: true, woman: false })
+    }
+    if (name === 'woman') {
+      setTheme({ man: false, woman: true })
+    }
+  }
+
+  const [userName, setUserName] = useState('')
+  const [userEmail, setUserEmail] = useState('')
+  const [userLocation, setUserLocation] = useState('')
+  const [userDate, setUserDate] = useState('')
+  // const [userAbout, setUserAbout] = useState('')
+  const [userPrice, setUserPrice] = useState('')
+
+  const sex = theme.man ? 'мужчина' : 'женщина'
+
+
+  const Data: TUserSchema = {
+    passwordHash: '',
+    photoBase64: '',
+    coverBase64: '',
+    name: userName,
+    email: userEmail,
+    location: userLocation,
+    dateBirthday: userDate,
+    activity: active.split(' '),
+    specialization: specialization.split(' '),
+    price: Number(userPrice),
+    sex: sex,
+    experience: experience,
+    aboutMe: 'string',
+    picturesBase64: ['string[]', 'fggghh']
+  }
+
+  // const handleButtonClick = () => {
+  //   sendUser(Data)
+  // }
 
   return (
     <div
@@ -147,6 +103,8 @@ const CreatingProfileComponent = (): JSX.Element => {
           placeholder='Иванов Иван Иванович'
           size='small'
           type='text'
+          value={userName}
+          onCahge={event => setUserName(event.target.value)}
         />
         <Input
           id="e-mail"
@@ -154,6 +112,8 @@ const CreatingProfileComponent = (): JSX.Element => {
           placeholder='mail@mail.ru'
           size='small'
           type='mail'
+          value={userEmail}
+          onCahge={event => setUserEmail(event.target.value)}
         />
         <Input
           id="location"
@@ -161,6 +121,8 @@ const CreatingProfileComponent = (): JSX.Element => {
           placeholder='Страна, город'
           size='small'
           type='text'
+          value={userLocation}
+          onCahge={event => setUserLocation(event.target.value)}
         />
         <Input
           id="date_birth"
@@ -168,6 +130,8 @@ const CreatingProfileComponent = (): JSX.Element => {
           placeholder='дд.мм.гггг'
           size='small'
           type='date'
+          value={userDate}
+          onCahge={event => setUserDate(event.target.value)}
         />
         <DropDown
           options={activeData.content}
@@ -189,10 +153,24 @@ const CreatingProfileComponent = (): JSX.Element => {
           placeholder='1000'
           size='small'
           type='number'
+          value={userPrice}
+          onCahge={event => setUserPrice(event.target.value)}
         />
         <div className={styles.sex}>
-          <Checkbox title='Муж' id='man' />
-          <Checkbox title='Жен' id='woman' />
+          <Radio
+            text='Муж'
+            id='man'
+            name='man'
+            value='man'
+            onChange={onChangeTheme}
+            checked={theme.man} />
+          <Radio
+            text='Жен'
+            id='woman'
+            name='woman'
+            value='woman'
+            onChange={onChangeTheme}
+            checked={theme.woman} />
         </div>
         <DropDown
           options={experienceData.content}
@@ -208,7 +186,6 @@ const CreatingProfileComponent = (): JSX.Element => {
             <div className={styles.optional}> — Необязательное</div>
           </div>
           <textarea className={styles.textArea}>
-
           </textarea>
         </label>
       </div>
@@ -218,6 +195,7 @@ const CreatingProfileComponent = (): JSX.Element => {
         <Button
           typeButton='blue'
           title='Регистрация'
+          click={() => sendUser(Data)}
         />
         <Link to='..'>
           <Button

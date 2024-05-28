@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import styles from './input.module.css';
 import clsx from 'clsx';
 
@@ -9,7 +10,9 @@ interface InputProps {
   errorMessage?: string
   size?: 'big' | 'small'
   type: string
-  view?: 'main' 
+  view?: 'main'
+  value: string | ''
+  onCahge: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const Input = (props: InputProps): JSX.Element => {
@@ -22,6 +25,14 @@ const Input = (props: InputProps): JSX.Element => {
     error = styles.error
     stylesErrorMessage = styles.visible
   }
+  const [userData, setUserData] = useState(props.value)
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserData(event.target.value);
+  };
+
+  useEffect(() => {
+    setUserData(props.value);
+  }, [props.value]);
   return (
     <label
       className=
@@ -39,6 +50,8 @@ const Input = (props: InputProps): JSX.Element => {
         placeholder={props.placeholder}
         className={clsx(error, typeSize)}
         type={props.type}
+        value={userData}
+        onChange={props.onCahge}
       />
       <div className={stylesErrorMessage}>{props.errorMessage}</div>
     </label>

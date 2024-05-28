@@ -1,0 +1,35 @@
+.activityContainer {
+    display: block;
+    border-radius: 60px;
+    font-size: 14px;
+    padding: 10px;
+    background-repeat: no-repeat;
+    background-position: 13% ;
+    font-weight: 600;
+    height: 21px;
+    margin-right: 15px;
+}
+
+.modelClass {
+    background-color: rgba(248, 131, 131, 0.5);
+    background-image: url(../../image/modelIcon.svg);
+    width: 70px;
+    padding-left: 39px;
+    color: rgba(248, 88, 88, 1);
+}
+
+.photoClass {
+    background-color: rgba(248, 184, 131, 0.5);
+    background-image: url(../../image/photoIcon.svg);
+    width: 90px;
+    padding-left: 45px;
+    color: rgba(248, 160, 88, 1);
+}
+
+.videoClass {
+    background-color: rgba(105, 200, 200, 0.5);
+    background-image: url(../../image/videIcon.svg);
+    width: 100px;
+    padding-left: 50px;
+    color: rgba(73, 200, 200, 1);
+}

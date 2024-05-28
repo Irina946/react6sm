@@ -1,66 +1,92 @@
-.customCheckbox {
-    position: absolute;
-    z-index: -1;
-    opacity: 0;
-}
-
-.customCheckbox+label {
-    display: inline-flex;
-    align-items: flex-start;
-    user-select: none;
+.label {
+    color: #828282;
+    -webkit-tap-highlight-color: transparent;
     cursor: pointer;
-    color: #272727A6;
-    flex-direction: column-reverse;
-    margin-bottom: 10px;
 }
 
-.customCheckbox+label::before {
-    content: '';
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-    flex-grow: 0;
-    border: none;
-    border-radius: 7px;
+.customRadioButton {
+    margin: 0;
+    visibility: hidden;
+  }
+
+  .customRadioButton:checked + span:after {
+    opacity: 1;
+  }
+  
+  .customRadioSpan {
+    cursor: pointer;
+    margin-left: -10px;
+    width: 25px;
+    height: 25px;
+    border-radius: 4px;
     background-color: rgba(71, 200, 200, 0.1);
-    margin-top: 15px;
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: 80% 65%;
+    display: inline-block;
+    position: relative;
+  }
+  
+  .customRadioSpan::after {
+    content: '\2713';
+    font-size: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  
+
+
+.selectTheme {
+  margin-top: 20px;
 }
 
-/*color blue */
-.customCheckbox:checked+label::before {
-    background-color: rgba(71, 200, 200, 0.5);
-    background-image: url(/src/image/checkbox.png);
+.selectTheme p {
+  margin: 0 0 5px 0;
+  padding: 0;
 }
 
-.customCheckbox:not(:disabled):active+label::before {
-    background-color: rgba(71, 200, 200, 0.5);
+.radioLabel {
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 400;
+  margin-right: 7px;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 }
 
-.customCheckbox:focus+label::before {
-    background-color: rgba(71, 200, 200, 0.3);
+.radioInput {
+  margin: 0;
+  visibility: hidden;
 }
 
-.customCheckbox:hover+label::before {
-    background-color: rgba(71, 200, 200, 0.3);
+.radioInput:checked + span:after {
+  opacity: 1;
 }
 
-
-/* checkbox not checked */
-
-
-.customCheckbox:not(:disabled):not(:checked)+label:hover::before {
-    background-color: rgba(71, 200, 200, 0.3);
+.customRadio {
+  left: -8px;
+  top: 6px;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #FFFFFF;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
 }
 
-.customCheckbox:not(:disabled):not(:checked)+label:active::before {
-    background-color: rgba(71, 200, 200, 0.5);
-}
-
-
-.customCheckbox:focus:not(:checked)+label::before {
-    background-color: rgba(71, 200, 200, 0.3);
+/* for inner filled circle */
+.customRadio::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: #FFFFFF;
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s;
 }

@@ -3,6 +3,12 @@ import DropDown from '../../components/drop-down/drop-down'
 import Input from '../../components/input/input'
 import styles from './customerFeed.module.css'
 import data from '../../data.json'
+import Slider from 'rc-slider'
+import 'rc-slider/assets/index.css'
+import { RadioButton } from '../../components/checkbox/checkbox'
+import Button from '../../components/button/button'
+
+
 
 export const CustomerFeed = (): JSX.Element => {
 
@@ -35,6 +41,29 @@ export const CustomerFeed = (): JSX.Element => {
   const selectedExperience = experienceData.content.find((item) => item.value === experience)
   const selectedAge = ageData.content.find((item) => item.value === age)
 
+  const [rangeValues, setRangeValues] = useState({ min: 10000, max: 100000 });
+
+  const handleRangeChange = (value: number | number[]) => {
+    if (Array.isArray(value)) {
+      setRangeValues({ min: value[0], max: value[1] });
+    }
+  }
+
+  const [theme, setTheme] = useState({ man: false, woman: false, any: false })
+
+  const onChangeTheme = (e) => {
+    const { name } = e.target
+    if (name === 'man') {
+      setTheme({ man: true, woman: false, any: false })
+    }
+    if (name === 'woman') {
+      setTheme({ man: false, woman: true, any: false })
+    }
+    if (name === 'any') {
+      setTheme({ man: false, woman: false, any: true })
+    }
+  }
+
 
   return (
     <div className={styles.containerSearchOutside}>
@@ -45,7 +74,8 @@ export const CustomerFeed = (): JSX.Element => {
           label='Город'
           placeholder='Начните вводить'
           view='main'
-          type='small'
+          type='text'
+
         />
         <DropDown
           options={specializationData.content}
@@ -71,6 +101,54 @@ export const CustomerFeed = (): JSX.Element => {
           onChange={handleExperienceSelect}
           size='small'
         />
+        <div className={styles.radioButtonContainer}>
+          <p>Пол</p>
+          <RadioButton
+            name="man"
+            id="man"
+            value="man"
+            text="М"
+            onChange={onChangeTheme}
+            checked={theme.man}
+          />
+          <RadioButton
+            name="woman"
+            id="woman"
+            value="woman"
+            text="Ж"
+            onChange={onChangeTheme}
+            checked={theme.woman}
+          />
+          <RadioButton
+            name="any"
+            id="any"
+            value="any"
+            text="Любой"
+            onChange={onChangeTheme}
+            checked={theme.any}
+          />
+        </div>
+        <div className={styles.sliderContainer}>
+          Цена
+          <Slider
+            min={1000}
+            max={100000}
+            step={500}
+            range
+            defaultValue={[rangeValues.min, rangeValues.max]}
+            onChange={handleRangeChange}
+            trackStyle={{ backgroundColor: "#49C8C8", height: 2 }}
+            railStyle={{ backgroundColor: "white", height: 2 }}
+            handleStyle={{
+              border: "none",
+              height: 15,
+              width: 15,
+              marginTop: -7,
+              backgroundColor: "#49C8C8",
+            }}
+          />
+          <div className={styles.priceText}>от {rangeValues.min} до {rangeValues.max} рублей</div>
+        </div>
         <DropDown
           options={ageData.content}
           selected={selectedAge || null}
@@ -78,6 +156,11 @@ export const CustomerFeed = (): JSX.Element => {
           view='main'
           onChange={handleAgeSelect}
           size='small'
+        />
+        <Button
+          title='Искать'
+          typeButton='search'
+
         />
       </div>
     </div>

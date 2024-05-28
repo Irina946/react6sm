@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, MouseEventHandler } from 'react';
 import styles from './drop-down.module.css'
 import arrowDown from '../../image/arrow.png'
-import arrowMain from '../../image/arrowMain.png'
+import arrowMain from '../../image/ArrowMain.svg'
 import clsx from 'clsx';
 
 type Option = {
