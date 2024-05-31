@@ -16,13 +16,30 @@ export type TUserSchema = {
 }
 
 export async function sendUser(data: TUserSchema) {
-  await fetch('http://localhost:3010/api/createUser',
+  await fetch('http://localhost:3010/api/updateUser',
     {
-      mode: 'no-cors',
       method: 'POST',
       body: JSON.stringify(data),
+      headers: new Headers({ 'content-type': 'application/json' }),
     }
   )
   console.log(data)
 }
 
+export async function sendNewUser(data: TUserSchema) {
+  // const requestModel = {email: data.email}
+
+  // const answer = await fetch('http://localhost:3010/api/user', {
+  //   method: 'POST',
+  //   body: JSON.stringify(requestModel),
+  //   headers: new Headers({ 'content-type': 'application/json' })
+  // })
+  // console.log(answer)
+  await fetch('http://localhost:3010/api/createUser',
+    {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: new Headers({ 'content-type': 'application/json' }),
+    }
+  )
+}

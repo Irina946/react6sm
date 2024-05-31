@@ -197,7 +197,7 @@ const CreatingProfileComponent = (): JSX.Element => {
           title='Регистрация'
           click={() => sendUser(Data)}
         />
-        <Link to='..'>
+        <Link to='/lk-creating'>
           <Button
             typeButton='empty'
             title='Отмена'
