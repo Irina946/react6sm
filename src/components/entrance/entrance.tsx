@@ -32,7 +32,7 @@ const EntarnceComponent = (): JSX.Element => {
 
   const handleButtonClickEntrance = (): void => {
     if (!precenceUser) {
-      if (userPassword === userFromBD!.passwordHash) {
+      if ('passwordHash' in userFromBD! && userFromBD.passwordHash === userPassword)  {
         navigate('/lk-creating')
         setItem<string>('email', userEmail)
       } else {

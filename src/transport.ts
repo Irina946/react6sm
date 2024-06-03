@@ -19,9 +19,9 @@ export function setItem<T>(key: string, value: T): void {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-export function getItem<T>(key: string): T | {email: string} {
+export function getItem(key: string): string {
   const item = localStorage.getItem(key);
-  return item ? JSON.parse(item) as T : {email: 'none'};
+  return item ? JSON.parse(item) as string : 'none';
 }
 
 const URL = 'http://84.201.130.181:3010'
@@ -34,7 +34,7 @@ export async function sendUser(data: TUserSchema) {
       headers: new Headers({ 'content-type': 'application/json' }),
     }
   )
-  
+
 }
 
 export async function sendNewUser(data: TUserSchema) {
@@ -48,7 +48,7 @@ export async function sendNewUser(data: TUserSchema) {
 }
 
 export async function readUser(emailLocal: string) {
-  const requestModel = {email: emailLocal}
+  const requestModel = { email: emailLocal }
 
   const answer = await fetch(`${URL}/api/user`, {
     method: 'POST',
@@ -60,7 +60,7 @@ export async function readUser(emailLocal: string) {
 
 
 export async function deleetUser(emailLocal: string) {
-  const requestModel = {email: emailLocal}
+  const requestModel = { email: emailLocal }
 
   await fetch(`${URL}/api/deleteUser`, {
     method: 'POST',

@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint no-use-before-define: 0 */
 import { useEffect, useState } from 'react';
 import Button from '../button/button';
 import DropDown from '../drop-down/drop-down';
@@ -52,7 +54,7 @@ const CreatingProfileComponent = (): JSX.Element => {
 
   const dataSet = data.models
   const [activeData, specializationData, experienceData] = [...dataSet]
-  
+
   const [optionActiveData, setOptionActiveData] = useState<{ name: string, id: string }[]>([])
   const onActiveSelect = (selectedList: { name: string, id: string }[], _selectedItem: { name: string, id: string }) => {
     setOptionActiveData(selectedList);
@@ -110,19 +112,31 @@ const CreatingProfileComponent = (): JSX.Element => {
 
   const sex = theme.man ? 'man' : 'woman'
 
-  const uploadPic = (e) => {
+  const uploadPic = (e: any) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = () => setImageFile(reader.result);
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === 'string') {
+        setImageFile(result);
+      }
+    };
   }
 
-  const uploadCover = (e) => {
+  const uploadCover = (e: any) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = () => setImageCover(reader.result);
+    reader.onload = () => {
+      const result = reader.result;
+      if (typeof result === 'string') {
+        setImageCover(result);
+      }
+    };
   }
+
+
 
   const Data: TUserSchema = {
     passwordHash: userPassword,
@@ -227,9 +241,9 @@ const CreatingProfileComponent = (): JSX.Element => {
           placeholder='Выберите деятельность'
         />
         <Multiselect
-          options={specializationData.content} 
+          options={specializationData.content}
           onSelect={onSpecializationSelect}
-          onRemove={onRemoveSpecialization} 
+          onRemove={onRemoveSpecialization}
           displayValue="name"
           placeholder='Выберите специализацию'
         />

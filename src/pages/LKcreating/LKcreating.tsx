@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import styles from './LKcreating.module.css'
 import Button from '../../components/button/button'
 import { ActivityBlock } from '../../components/activityBlock/activityBlock'
@@ -59,12 +60,17 @@ export const LKCreating = (): JSX.Element => {
     });
   }, []);
 
-  const uploadPhotos = (e) => {
+   const uploadPhotos = (e: any) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = () => setPhoto(reader.result);
-  }
+    reader.onload = () => {
+        const result = reader.result;
+        if (typeof result === 'string') {
+            setPhoto(result);
+        }
+    };
+}
 
   const Data: TUserSchema = {
     passwordHash: userPassword,
@@ -115,7 +121,7 @@ export const LKCreating = (): JSX.Element => {
               typeButton='empty'
               title='Удалить'
               size='small'
-              click={() => deleteProfile(emailFromLocalStorage.email)}
+              click={() => deleteProfile(emailFromLocalStorage)}
             />
           </div>
         </div>
