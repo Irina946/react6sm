@@ -24,7 +24,7 @@ export function getItem<T>(key: string): T | {email: string} {
   return item ? JSON.parse(item) as T : {email: 'none'};
 }
 
-const URL = 'http://localhost:3010'
+const URL = 'http://84.201.130.181:3010'
 
 export async function sendUser(data: TUserSchema) {
   await fetch(`${URL}/api/updateUser`,
