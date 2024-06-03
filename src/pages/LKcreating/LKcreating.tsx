@@ -6,18 +6,13 @@ import { DropDownLK } from '../../components/dropDownLk/dropDownLK';
 import Modal from 'react-modal';
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { deleetUser, getItem, readUser } from '../../transport'
+import { TUserSchema, deleetUser, getItem, readUser, sendUser } from '../../transport'
 
 export const LKCreating = (): JSX.Element => {
   const navigate = useNavigate();
 
   const [modalOpen, setOpenModal] = useState(false);
-  // const [fileList, setFileList] = useState([]);
-
-  // const updateFileList = (file: Object) => {
-  //   setFileList([...fileList, file]);
-  // }
-  const emailFromLocalStorage = getItem<{ email: string }>('email')
+  const emailFromLocalStorage = getItem('email')
   const deleteProfile = (email: string | ''): void => {
     deleetUser(email)
     navigate('..')
@@ -27,24 +22,74 @@ export const LKCreating = (): JSX.Element => {
   const [userLocation, setUserLocation] = useState('')
   const [activityUser, setActivityUser] = useState<string[]>(['model', 'video', 'photo'])
   const [specializationUser, setSpecializationUser] = useState<string[]>([])
-  const [photoLK, setPhotoLK] = useState();
+  const [photoLK, setPhotoLK] = useState<string>('');
   const [imageCover, setImageCover] = useState<string>('');
+  const [userPassword, setUserPassword] = useState<string>('')
+  const [userEmail, setUserEmail] = useState('')
+  const [userDate, setUserDate] = useState('')
+  const [userAbout, setUserAbout] = useState('')
+  const [userPrice, setUserPrice] = useState('');
+  const [sexUser, setSexUser] = useState('');
+  const [experience, setExperienceValue] = useState('');
+  const [photos, setPhotos] = useState<string[]>([])
+  const [photo, setPhoto] = useState<string>('')
+  const newPhoto = photos
 
   useEffect(() => {
-    const promiseFromBD = readUser(emailFromLocalStorage.email)
+    const promiseFromBD = readUser(emailFromLocalStorage)
     promiseFromBD?.then(async result => {
+      console.log()
       setUserName(result.name)
       setUserLocation(result.location);
       setActivityUser(result.activity);
       setSpecializationUser(result.specialization)
       setPhotoLK(result.photoBase64)
       setImageCover(result.coverBase64)
+      setUserEmail(result.email);
+      setUserDate(result.dateBirthday);
+      setUserPrice(result.price);
+      setSexUser(result.sex)
+      setExperienceValue(result.experience)
+      setUserAbout(result.aboutMe)
+      setUserPassword(result.password)
+      setImageCover(result.coverBase64)
+      setPhotos(result.picturesBase64)
     }).catch(error => {
       console.log(error)
     });
   }, []);
 
+  const uploadPhotos = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => setPhoto(reader.result);
+  }
 
+  const Data: TUserSchema = {
+    passwordHash: userPassword,
+    photoBase64: photoLK,
+    coverBase64: imageCover,
+    name: userName,
+    email: userEmail,
+    location: userLocation,
+    dateBirthday: userDate,
+    activity: activityUser,
+    specialization: specializationUser,
+    price: Number(userPrice),
+    sex: sexUser,
+    experience: experience,
+    aboutMe: userAbout,
+    picturesBase64: photos
+  }
+
+  const handleButtonClick = () => {
+    newPhoto.unshift(photo);
+    setPhotos(newPhoto)
+    sendUser(Data)
+    setPhoto('')
+    setOpenModal(false)
+  }
 
   return (
     <>
@@ -83,7 +128,7 @@ export const LKCreating = (): JSX.Element => {
             </div>
           ))}
           Специализация:
-          {specializationUser.map((specialization: string, idx: number) => (
+          {specializationUser?.map((specialization: string, idx: number) => (
             idx < 2 ?
               <div key={idx}>
                 <SpecializationBlock title={specialization} />
@@ -99,18 +144,13 @@ export const LKCreating = (): JSX.Element => {
         <div className={styles.bottomPhotoContainer}>
           <button onClick={() => setOpenModal(true)} className={styles.containerPhotoNew}>
           </button>
-          <div className={styles.containerPhoto}>
-            <img className={styles.photo} src='src\image\lk\collage-from-different-pictures-of-tasty-food-400-102813299.jpg' />
-          </div>
-          <div className={styles.containerPhoto}>
-            <img className={styles.photo} src='src\image\lk\food.png' />
-          </div>
-          <div className={styles.containerPhoto}>
-            <img className={styles.photo} src='src\image\lk\KollazhBig.png' />
-          </div>
-          <div className={styles.containerPhoto}>
-            <img className={styles.photo} src='src\image\lk\tsvety_fioletovyj_rastenie_107518_300x188.jpg' />
-          </div>
+          {photos?.map((photo: string, idx: number) => (
+            <div
+              className={styles.containerPhoto}
+              key={idx}>
+                <img className={styles.photo} src={photo} />
+            </div>
+          ))}
         </div>
       </div>
       <Modal
@@ -125,14 +165,41 @@ export const LKCreating = (): JSX.Element => {
           }
         }}
         className={styles.addPhoto_modal}>
+        <div className={styles.informartionButton}>
+          <div className={styles.labelAddPhotoMadol}>
+            Загрузите фото в формате .jpg, .png или .jpeg
+          </div>
+          <Button
+            title='Сохранить'
+            typeButton='blue'
+            click={() => handleButtonClick()}
+          />
+          <Button
+            title='Отменить'
+            typeButton='empty'
+            click={() => { setPhoto('') }}
+          />
+        </div>
+        {photo !== '' ? <img src={photo} className={styles.newPhoto} /> :
+          <div>
+            <input
+              id='add-photo'
+              className={styles.inputPhoto}
+              type='file' accept='image/png, image/jpg, image/jpeg'
+              multiple
+              onChange={uploadPhotos}
+            />
+            <label
+              htmlFor='add-photo'
+              className={styles.uploadPhoto}>
+              Загрузите файл
+            </label>
 
-        <div className={styles.labelAddPhotoMadol}>
-          Загрузите фото в формате .jpg, .png или .jpeg
-        </div>
-        <div>
-          <input id='add-photo' className={styles.inputPhoto} type='file' accept='image/png, image/jpg, image/jpeg' multiple></input>
-          <label htmlFor='add-photo' className={styles.uploadPhoto}>Загрузите файл</label>
-        </div>
+
+          </div>
+
+        }
+
       </Modal>
     </>
   )

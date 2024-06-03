@@ -2,8 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import Button from '../button/button';
 import Input from '../input/input';
 import styles from './registration.module.css'
-import { useState } from 'react';
-import { TUserSchema, sendNewUser, setItem } from '../../transport';
+import { useEffect, useState } from 'react';
+import { TUserSchema, readUser, sendNewUser, setItem } from '../../transport';
 
 const RegistartionComponent = (): JSX.Element => {
   const navigate = useNavigate();
@@ -12,11 +12,21 @@ const RegistartionComponent = (): JSX.Element => {
   const [userEmail, setUserEmail] = useState('')
   const [userPassword, setUserPassword] = useState('')
   const [userDoublePassword, setuserDoublePassword] = useState('')
+  const answer = { message: 'User not found' }
+  const [precenceUser, setPrecenceUser] = useState(false)
+  useEffect(() => {
+    const dataFromBD = readUser(userEmail)
+    dataFromBD?.then(result => {
+      setPrecenceUser(JSON.stringify(result) === JSON.stringify(answer))
+    }).catch(error => {
+      console.log(error)
+    });
+  }, [userEmail]);
 
   const errorPassword = userPassword !== userDoublePassword || userPassword.length < 8 || userPassword.length > 16;
   const errorDoublePassword = userPassword !== userDoublePassword;
   const errorName = userName === '';
-  const errorEmail = userEmail === '';
+  const errorEmail = userEmail === '' || !precenceUser;
 
   const errorMessagePassword = userPassword.length < 8 ? 'Меньше 8 символов'
     : userPassword.length > 16 ? 'Больше 8 символов'
@@ -24,7 +34,7 @@ const RegistartionComponent = (): JSX.Element => {
         : '';
   const errorMessageDoublePassword = userPassword !== userDoublePassword ? 'Пароли не совпадают' : ''
   const errorMessageName = 'Введите имя'
-  const errorMessageEmail = 'Введите email'
+  const errorMessageEmail = userEmail === '' ? 'Введите email' : !precenceUser ? 'Такой пользователь существует' : ''
 
   const Data: TUserSchema = {
     passwordHash: userPassword,

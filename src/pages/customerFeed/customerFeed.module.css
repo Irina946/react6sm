@@ -4,8 +4,8 @@
     background-repeat: no-repeat;
     background-size:100% 100%;
     padding-top: 90px;
-    padding-left: 480px;
-    width: calc(100vw - 480px);
+    padding-left: 300px;
+    width: calc(98.8vw - 300px);
     height: 360px;
     font-size: 30px;
     font-weight: 300;
@@ -14,7 +14,7 @@
 
 .containerSearchInside {
     position: absolute;
-    left: 25%;
+    left: 20%;
     top: 25%;
     width: 905px;
     height: 190px;
@@ -45,4 +45,11 @@
 .radioButtonContainer {
     font-size: 16px;
     line-height: 164%;
+}
+
+.users_container {
+    padding: 50px 20px;
+    padding-left: 300px;
+    display: flex;
+    gap: 20px;
 }

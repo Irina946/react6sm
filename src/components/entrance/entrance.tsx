@@ -5,17 +5,11 @@ import styles from './entrance.module.css'
 import { useEffect, useState } from 'react';
 import { type TUserSchema, readUser, setItem } from '../../transport';
 
-interface LocalStorage {
-  email: string
-}
-
 interface AnswerNotFound {
   message: string;
 }
 
 const EntarnceComponent = (): JSX.Element => {
-
-
   const navigate = useNavigate()
 
   const [userEmail, setUserEmail] = useState('')
@@ -40,7 +34,7 @@ const EntarnceComponent = (): JSX.Element => {
     if (!precenceUser) {
       if (userPassword === userFromBD!.passwordHash) {
         navigate('/lk-creating')
-        setItem<string>('preferences', userEmail)
+        setItem<string>('email', userEmail)
       } else {
         setErrorPassword(true)
       }

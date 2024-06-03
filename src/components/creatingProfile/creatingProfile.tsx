@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import Button from '../button/button';
 import DropDown from '../drop-down/drop-down';
@@ -13,7 +14,7 @@ import Multiselect from 'multiselect-react-dropdown';
 
 const CreatingProfileComponent = (): JSX.Element => {
   const navigate = useNavigate();
-  const emailFromLocalStorage = getItem<string>('email')
+  const emailFromLocalStorage = getItem('email')
   const [userName, setUserName] = useState('')
   const [userEmail, setUserEmail] = useState('')
   const [userLocation, setUserLocation] = useState('')
@@ -25,23 +26,24 @@ const CreatingProfileComponent = (): JSX.Element => {
   const [userPassword, setUserPassword] = useState('');
   const [imageFile, setImageFile] = useState<string>('');
   const [imageCover, setImageCover] = useState<string>('');
+  const [photos, setPhotos] = useState<string[]>([])
 
   useEffect(() => {
-    const dataFromBD = readUser(emailFromLocalStorage.email)
+    console.log(emailFromLocalStorage)
+    const dataFromBD = readUser(emailFromLocalStorage)
     dataFromBD?.then(result => {
       setUserName(result.name);
       setUserEmail(result.email);
       setUserLocation(result.location);
       setUserDate(result.dateBirthday);
       setUserPrice(result.price);
-      // setActiveValue(result.activity[0])
-      // setSpecializationValue(result.specialization[0])
       setSexUser(result.sex)
       setExperienceValue(result.experience)
       setUserAbout(result.aboutMe)
       setUserPassword(result.password)
       setImageFile(result.photoBase64)
       setImageCover(result.coverBase64)
+      setPhotos(result.picturesBase64)
     }).catch(error => {
       console.log(error)
     });
@@ -50,7 +52,7 @@ const CreatingProfileComponent = (): JSX.Element => {
 
   const dataSet = data.models
   const [activeData, specializationData, experienceData] = [...dataSet]
-  console.log(experienceData.content)
+  
   const [optionActiveData, setOptionActiveData] = useState<{ name: string, id: string }[]>([])
   const onActiveSelect = (selectedList: { name: string, id: string }[], _selectedItem: { name: string, id: string }) => {
     setOptionActiveData(selectedList);
@@ -82,7 +84,7 @@ const CreatingProfileComponent = (): JSX.Element => {
       value = value == "" ? element.name : value + "," + element.name;
     });
   }
-
+  console.log(optionSpecializationData.map((item: { name: string, id: string }) => (item.id)))
   const selectedExperience = experienceData.content.find((item) => item.id === experience)
   const handleExperienceSelect = (value: string) => {
     setExperienceValue(value)
@@ -136,7 +138,7 @@ const CreatingProfileComponent = (): JSX.Element => {
     sex: sex,
     experience: experience,
     aboutMe: userAbout,
-    picturesBase64: ['string[]', 'fggghh']
+    picturesBase64: photos
   }
 
   const handleButtonClick = () => {
@@ -218,16 +220,16 @@ const CreatingProfileComponent = (): JSX.Element => {
           onCahge={event => setUserDate(event.target.value)}
         />
         <Multiselect
-          options={activeData.content} // Options to display in the dropdown
-          onSelect={onActiveSelect} // Function will trigger on select event
-          onRemove={onRemoveActive} // Function will trigger on remove event
+          options={activeData.content}
+          onSelect={onActiveSelect}
+          onRemove={onRemoveActive}
           displayValue="name"
           placeholder='Выберите деятельность'
         />
         <Multiselect
-          options={specializationData.content} // Options to display in the dropdown
-          onSelect={onSpecializationSelect} // Function will trigger on select event
-          onRemove={onRemoveSpecialization} // Function will trigger on remove event
+          options={specializationData.content} 
+          onSelect={onSpecializationSelect}
+          onRemove={onRemoveSpecialization} 
           displayValue="name"
           placeholder='Выберите специализацию'
         />
@@ -301,4 +303,3 @@ const CreatingProfileComponent = (): JSX.Element => {
 };
 
 export default CreatingProfileComponent;
-

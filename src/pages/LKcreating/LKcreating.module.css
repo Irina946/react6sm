@@ -127,9 +127,9 @@
     transform: translate(-50%, -50%);
     z-index: 1000;
     background-color: #FFFFFF;
-    padding: 20px 50px;
     display: flex;
     flex-direction: row-reverse;
+    height: 250px;
 }
 
 .inputPhoto {
@@ -143,6 +143,7 @@
     background: none;
     padding: 45px;
     padding-left: 150px;
+    margin: 40px;
     width: 100px;
     height: 60px;
     border: 5px dashed #BDBDBD;
@@ -168,3 +169,18 @@
   .labelAddPhotoMadol {
     margin-left: 30px;
   }
+
+.newPhoto {
+    width: 200px;
+    height: 200px;
+    margin: 40px;
+}
+
+.informartionButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: 25px;
+    margin-left: 0;
+}

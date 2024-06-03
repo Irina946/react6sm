@@ -19,9 +19,9 @@ export function setItem<T>(key: string, value: T): void {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-export function getItem<T>(key: string): T | '' {
+export function getItem<T>(key: string): T | {email: string} {
   const item = localStorage.getItem(key);
-  return item ? JSON.parse(item) as T : '';
+  return item ? JSON.parse(item) as T : {email: 'none'};
 }
 
 export async function sendUser(data: TUserSchema) {
@@ -65,4 +65,13 @@ export async function deleetUser(emailLocal: string) {
     body: JSON.stringify(requestModel),
     headers: new Headers({ 'content-type': 'application/json' })
   })
+}
+
+
+export async function readlAllUsers() {
+  const users = await fetch('http://localhost:3010/api/userAll', {
+    method: 'POST'
+  })
+
+  return users.json()
 }
