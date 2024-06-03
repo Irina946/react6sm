@@ -2,8 +2,7 @@ import styles from './activityBlock.module.css';
 import clsx from 'clsx';
 
 interface ActivitryBlockProps {
-  activity: 'photo' | 'video' | 'model'
-
+  activity: string
 }
 
 export const ActivityBlock = (props: ActivitryBlockProps): JSX.Element => {

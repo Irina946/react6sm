@@ -6,7 +6,7 @@ interface radioButtonProps {
   value: string,
   checked: boolean,
   text: string,
-  onChange?: (e: React.FormEvent<HTMLInputElement>) => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const Radio = (props: radioButtonProps): JSX.Element => {
@@ -33,7 +33,7 @@ interface radioButtonProps {
   value: string,
   checked: boolean,
   text: string,
-  onChange?: (e: React.FormEvent<HTMLInputElement>) => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const RadioButton = (props: radioButtonProps): JSX.Element => {

@@ -1,43 +1,102 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../button/button';
 import DropDown from '../drop-down/drop-down';
 import Input from '../input/input';
 import styles from './creatingProfile.module.css'
 import { Radio } from '../checkbox/checkbox';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import Background from '../../image/backgroundGrey.png';
 import data from '../../data.json';
-import { TUserSchema, sendUser } from '../../transport';
-
+import { TUserSchema, getItem, readUser, sendUser } from '../../transport';
+import Multiselect from 'multiselect-react-dropdown';
 
 
 const CreatingProfileComponent = (): JSX.Element => {
-  const [active, setActiveValue] = useState('');
-  const handleActiveSelect = (value: string) => {
-    setActiveValue(value)
-  }
-
-  const [specialization, setSpecializationValue] = useState('');
-  const handleSpecializationSelect = (value: string) => {
-    setSpecializationValue(value)
-  }
-
+  const navigate = useNavigate();
+  const emailFromLocalStorage = getItem<string>('email')
+  const [userName, setUserName] = useState('')
+  const [userEmail, setUserEmail] = useState('')
+  const [userLocation, setUserLocation] = useState('')
+  const [userDate, setUserDate] = useState('')
+  const [userAbout, setUserAbout] = useState('')
+  const [userPrice, setUserPrice] = useState('');
+  const [sexUser, setSexUser] = useState('');
   const [experience, setExperienceValue] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+  const [imageFile, setImageFile] = useState<string>('');
+  const [imageCover, setImageCover] = useState<string>('');
+
+  useEffect(() => {
+    const dataFromBD = readUser(emailFromLocalStorage.email)
+    dataFromBD?.then(result => {
+      setUserName(result.name);
+      setUserEmail(result.email);
+      setUserLocation(result.location);
+      setUserDate(result.dateBirthday);
+      setUserPrice(result.price);
+      // setActiveValue(result.activity[0])
+      // setSpecializationValue(result.specialization[0])
+      setSexUser(result.sex)
+      setExperienceValue(result.experience)
+      setUserAbout(result.aboutMe)
+      setUserPassword(result.password)
+      setImageFile(result.photoBase64)
+      setImageCover(result.coverBase64)
+    }).catch(error => {
+      console.log(error)
+    });
+  }, []);
+
+
+  const dataSet = data.models
+  const [activeData, specializationData, experienceData] = [...dataSet]
+  console.log(experienceData.content)
+  const [optionActiveData, setOptionActiveData] = useState<{ name: string, id: string }[]>([])
+  const onActiveSelect = (selectedList: { name: string, id: string }[], _selectedItem: { name: string, id: string }) => {
+    setOptionActiveData(selectedList);
+    let value = "";
+    selectedList.forEach(element => {
+      value = value == "" ? element.name : value + "," + element.name;
+    });
+  }
+  const onRemoveActive = (selectedList: { name: string, id: string }[], _removedItem: { name: string, id: string }) => {
+    setOptionActiveData(selectedList);
+    let value = "";
+    selectedList.forEach(element => {
+      value = value == "" ? element.name : value + "," + element.name;
+    });
+  }
+
+  const [optionSpecializationData, setOptionSpecializationData] = useState<{ name: string, id: string }[]>([])
+  const onSpecializationSelect = (selectedList: { name: string, id: string }[], _selectedItem: { name: string, id: string }) => {
+    setOptionSpecializationData(selectedList);
+    let value = "";
+    selectedList.forEach(element => {
+      value = value == "" ? element.name : value + "," + element.name;
+    });
+  }
+  const onRemoveSpecialization = (selectedList: { name: string, id: string }[], _removedItem: { name: string, id: string }) => {
+    setOptionSpecializationData(selectedList);
+    let value = "";
+    selectedList.forEach(element => {
+      value = value == "" ? element.name : value + "," + element.name;
+    });
+  }
+
+  const selectedExperience = experienceData.content.find((item) => item.id === experience)
   const handleExperienceSelect = (value: string) => {
     setExperienceValue(value)
   }
 
-  const dataSet = data.models
-  const [activeData, specializationData, experienceData] = [...dataSet]
+  const sexBD = sexUser === 'man' ? true : false
 
+  const sexFromBD = {
+    man: sexBD,
+    woman: !sexBD
+  }
+  const [theme, setTheme] = useState(sexFromBD)
 
-
-  const selectedActive = activeData.content.find((item) => item.value === active)
-  const selectedSpecialization = specializationData.content.find((item) => item.value === specialization)
-  const selectedExperience = experienceData.content.find((item) => item.value === experience)
-
-  const [theme, setTheme] = useState({ man: false, woman: false })
-
-  const onChangeTheme = (e) => {
+  const onChangeTheme = (e: { target: { name: unknown; }; }) => {
     const { name } = e.target
     if (name === 'man') {
       setTheme({ man: true, woman: false })
@@ -47,51 +106,76 @@ const CreatingProfileComponent = (): JSX.Element => {
     }
   }
 
-  const [userName, setUserName] = useState('')
-  const [userEmail, setUserEmail] = useState('')
-  const [userLocation, setUserLocation] = useState('')
-  const [userDate, setUserDate] = useState('')
-  // const [userAbout, setUserAbout] = useState('')
-  const [userPrice, setUserPrice] = useState('')
+  const sex = theme.man ? 'man' : 'woman'
 
-  const sex = theme.man ? 'мужчина' : 'женщина'
+  const uploadPic = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => setImageFile(reader.result);
+  }
 
+  const uploadCover = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => setImageCover(reader.result);
+  }
 
   const Data: TUserSchema = {
-    passwordHash: '',
-    photoBase64: '',
-    coverBase64: '',
+    passwordHash: userPassword,
+    photoBase64: imageFile,
+    coverBase64: imageCover,
     name: userName,
     email: userEmail,
     location: userLocation,
     dateBirthday: userDate,
-    activity: active.split(' '),
-    specialization: specialization.split(' '),
+    activity: optionActiveData.map((item: { name: string, id: string }) => (item.id)),
+    specialization: optionSpecializationData.map((item: { name: string, id: string }) => (item.id)),
     price: Number(userPrice),
     sex: sex,
     experience: experience,
-    aboutMe: 'string',
+    aboutMe: userAbout,
     picturesBase64: ['string[]', 'fggghh']
   }
 
-  // const handleButtonClick = () => {
-  //   sendUser(Data)
-  // }
+  const handleButtonClick = () => {
+    sendUser(Data)
+    navigate('/lk-creating')
+  }
+
 
   return (
     <div
       className={styles.creatingProfileContainer}
     >
       <div className={styles.imagesContainer}>
-        <div className={styles.photoProfile}></div>
+        <div className={styles.photoProfile}>
+          <img className={styles.photoProfile} src={imageFile || Background} />
+        </div>
         <div className={styles.cover}>
-          Вы можете загрузить обложку к своему профилю
+          {imageCover ? <img className={styles.coverImage} src={imageCover} /> : <p>Вы можете загрузить обложку к своему профилю</p>}
+
         </div>
         <div className={styles.hrefContainer}>
-          <a>Загрузить фото</a>
+          <input
+            id='add-photo'
+            className={styles.inputPhoto}
+            type='file'
+            accept='image/png, image/jpg, image/jpeg'
+            onChange={uploadPic}
+          />
+          <label htmlFor='add-photo' className={styles.uploadPhoto}>Загрузите файл</label>
         </div>
         <div className={styles.hrefContainer}>
-          <a>Загрузить обложку</a>
+          <input
+            id='add-cover'
+            className={styles.inputPhoto}
+            type='file'
+            accept='image/png, image/jpg, image/jpeg'
+            onChange={uploadCover}
+          />
+          <label htmlFor='add-cover' className={styles.uploadPhoto}>Загрузить обложку</label>
         </div>
       </div>
       <div
@@ -133,19 +217,19 @@ const CreatingProfileComponent = (): JSX.Element => {
           value={userDate}
           onCahge={event => setUserDate(event.target.value)}
         />
-        <DropDown
-          options={activeData.content}
-          selected={selectedActive || null}
-          onChange={handleActiveSelect}
+        <Multiselect
+          options={activeData.content} // Options to display in the dropdown
+          onSelect={onActiveSelect} // Function will trigger on select event
+          onRemove={onRemoveActive} // Function will trigger on remove event
+          displayValue="name"
           placeholder='Выберите деятельность'
-          label='Деятельность'
         />
-        <DropDown
-          options={specializationData.content}
-          selected={selectedSpecialization || null}
-          onChange={handleSpecializationSelect}
+        <Multiselect
+          options={specializationData.content} // Options to display in the dropdown
+          onSelect={onSpecializationSelect} // Function will trigger on select event
+          onRemove={onRemoveSpecialization} // Function will trigger on remove event
+          displayValue="name"
           placeholder='Выберите специализацию'
-          label='Специализация'
         />
         <Input
           id="price"
@@ -185,7 +269,14 @@ const CreatingProfileComponent = (): JSX.Element => {
             <div><p>Расскажите о себе&nbsp;</p></div>
             <div className={styles.optional}> — Необязательное</div>
           </div>
-          <textarea className={styles.textArea}>
+          <textarea
+            className={styles.textArea}
+            value={userAbout}
+            onChange={
+              (e) =>
+                setUserAbout(e.target.value)
+            }
+          >
           </textarea>
         </label>
       </div>
@@ -194,8 +285,8 @@ const CreatingProfileComponent = (): JSX.Element => {
       >
         <Button
           typeButton='blue'
-          title='Регистрация'
-          click={() => sendUser(Data)}
+          title='Сохранить'
+          click={() => handleButtonClick()}
         />
         <Link to='/lk-creating'>
           <Button

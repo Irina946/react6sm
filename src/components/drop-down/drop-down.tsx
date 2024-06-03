@@ -5,8 +5,8 @@ import arrowMain from '../../image/ArrowMain.svg'
 import clsx from 'clsx';
 
 type Option = {
-  title: string,
-  value: string
+  name: string,
+  id: string
 };
 
 type SelectProps = {
@@ -15,7 +15,7 @@ type SelectProps = {
   placeholder?: string;
   mode?: 'rows' | 'cells';
   status?: 'default' | 'invalid';
-  onChange?: (selected: Option['value']) => void;
+  onChange?: (selected: Option['id']) => void;
   onClose?: () => void;
   label: string;
   size?: 'small';
@@ -24,19 +24,19 @@ type SelectProps = {
 
 type OptionProps = {
   option: Option;
-  onClick: (value: Option['value']) => void;
+  onClick: (id: Option['id']) => void;
 }
 
 const Option = (props: OptionProps): JSX.Element => {
   const {
-    option: { value, title },
+    option: { id, name },
     onClick
   } = props
 
   const optionRef = useRef<HTMLLIElement>(null)
 
   const handleClick =
-    (clickedValue: Option['value']): MouseEventHandler<HTMLLIElement> =>
+    (clickedValue: Option['id']): MouseEventHandler<HTMLLIElement> =>
       () => {
         onClick(clickedValue)
       }
@@ -47,7 +47,7 @@ const Option = (props: OptionProps): JSX.Element => {
 
     const handleEnterPress = (event: KeyboardEvent) => {
       if ((document.activeElement === option) && event.key === 'Enter') {
-        onClick(value);
+        onClick(id);
       }
     }
 
@@ -56,17 +56,17 @@ const Option = (props: OptionProps): JSX.Element => {
     return () => {
       option.removeEventListener('keydown', handleEnterPress);
     };
-  }, [value, onClick]);
+  }, [id, onClick]);
 
   return (
     <li
       className={styles.option}
-      value={value}
-      onClick={handleClick(value)}
+      value={id}
+      onClick={handleClick(id)}
       tabIndex={0}
       ref={optionRef}
     >
-      {title}
+      {name}
     </li>
   )
 }
@@ -125,9 +125,9 @@ const DropDown = (props: SelectProps): JSX.Element => {
     };
   }, []);
 
-  const handleOptionClick = (value: Option['value']) => {
+  const handleOptionClick = (id: Option['id']) => {
     setIsOpen(false);
-    onChange?.(value);
+    onChange?.(id);
   };
   const handlePlaceHolderClick: MouseEventHandler<HTMLDivElement> = () => {
     setIsOpen((prev) => !prev);
@@ -148,19 +148,19 @@ const DropDown = (props: SelectProps): JSX.Element => {
       <div
         className={clsx(styles.placeholder, color)}
         data-status={status}
-        data-selected={!!selected?.value}
+        data-selected={!!selected?.id}
         onClick={handlePlaceHolderClick}
         role='button'
         tabIndex={0}
         ref={placeholderRef}
       >
-        {selected?.title || placeholder}
+        {selected?.name || placeholder}
       </div>
       {isOpen && (
         <ul className={styles.select}>
           {options.map((option) => (
             <Option
-              key={option.value}
+              key={option.id}
               option={option}
               onClick={handleOptionClick}
             />

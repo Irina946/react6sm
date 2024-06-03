@@ -125,7 +125,7 @@ export const MultiRangeSlider = (props: MultiRangeSliderProps): JSX.Element => {
   }
 
   return (
-    <div className={styles.}>
+    <div>
       <Slider
         min={props.min}
         max={props.max}

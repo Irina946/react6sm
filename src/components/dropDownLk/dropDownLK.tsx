@@ -26,8 +26,8 @@ export const DropDownLK = (props: DropDownLKProps): JSX.Element => {
       {dropdownState.open && (
         <div className={styles.dropdown}>
           <ul className={styles.UlDropdown}>
-            {listEntrance.map((entrance: string) => (
-              <li className={styles.liDropdown}>{entrance}</li>
+            {listEntrance.map((entrance: string, idx: number) => (
+              <li key={idx} className={styles.liDropdown}>{entrance}</li>
             ))}
           </ul>
         </div>

@@ -1,16 +1,15 @@
 import styles from './LKcreating.module.css'
-import avatar from '../../image/avatar.png'
 import Button from '../../components/button/button'
 import { ActivityBlock } from '../../components/activityBlock/activityBlock'
 import { SpecializationBlock } from '../../components/specializationBlock/specializationBlock'
 import { DropDownLK } from '../../components/dropDownLk/dropDownLK';
 import Modal from 'react-modal';
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { deleetUser, getItem, readUser } from '../../transport'
 
 export const LKCreating = (): JSX.Element => {
-
-  const dataEntrance = ['Еда', 'Свадьба', 'Уличная', 'Студийная', 'Детская'];
+  const navigate = useNavigate();
 
   const [modalOpen, setOpenModal] = useState(false);
   // const [fileList, setFileList] = useState([]);
@@ -18,17 +17,46 @@ export const LKCreating = (): JSX.Element => {
   // const updateFileList = (file: Object) => {
   //   setFileList([...fileList, file]);
   // }
+  const emailFromLocalStorage = getItem<{ email: string }>('email')
+  const deleteProfile = (email: string | ''): void => {
+    deleetUser(email)
+    navigate('..')
+  }
+
+  const [userName, setUserName] = useState('')
+  const [userLocation, setUserLocation] = useState('')
+  const [activityUser, setActivityUser] = useState<string[]>(['model', 'video', 'photo'])
+  const [specializationUser, setSpecializationUser] = useState<string[]>([])
+  const [photoLK, setPhotoLK] = useState();
+  const [imageCover, setImageCover] = useState<string>('');
+
+  useEffect(() => {
+    const promiseFromBD = readUser(emailFromLocalStorage.email)
+    promiseFromBD?.then(async result => {
+      setUserName(result.name)
+      setUserLocation(result.location);
+      setActivityUser(result.activity);
+      setSpecializationUser(result.specialization)
+      setPhotoLK(result.photoBase64)
+      setImageCover(result.coverBase64)
+    }).catch(error => {
+      console.log(error)
+    });
+  }, []);
+
+
 
   return (
     <>
       <div className={styles.containerLKOutsideTop}>
+        <img className={styles.containerLKOutsideTop} src={imageCover} />
         <div className={styles.containerLKInsideTop}>
           <div className={styles.avatarContainer}>
-            <img className={styles.avatarImg} src={avatar} />
+            <img className={styles.avatarImg} src={photoLK} />
           </div>
           <div className={styles.informationContainer}>
-            <div className={styles.nameContainer}>Мария Иванова</div>
-            <div className={styles.locationContainer}>Российская Федерация, г. Уфа </div>
+            <div className={styles.nameContainer}>{userName}</div>
+            <div className={styles.locationContainer}>Российская Федерация, г. {userLocation} </div>
           </div>
           <div className={styles.buttonsContainer}>
             <Link to='/create-profile'>
@@ -40,21 +68,30 @@ export const LKCreating = (): JSX.Element => {
             </Link>
             <Button
               typeButton='empty'
-              title='Сообщения'
+              title='Удалить'
               size='small'
+              click={() => deleteProfile(emailFromLocalStorage.email)}
             />
           </div>
         </div>
       </div>
       <div className={styles.containerLKBottom}>
         <div className={styles.containerInformationBottom}>
-          <ActivityBlock activity='photo' />
-          <ActivityBlock activity='video' />
-          <ActivityBlock activity='model' />
+          {activityUser?.map((activity: string, idx: number) => (
+            <div key={idx}>
+              <ActivityBlock activity={activity} />
+            </div>
+          ))}
           Специализация:
-          <SpecializationBlock title='Еда' />
-          <SpecializationBlock title='Свадьба' />
-          <DropDownLK list={dataEntrance} />
+          {specializationUser.map((specialization: string, idx: number) => (
+            idx < 2 ?
+              <div key={idx}>
+                <SpecializationBlock title={specialization} />
+              </div>
+              : <div key={idx}></div>
+
+          ))}
+          <DropDownLK list={specializationUser} />
         </div>
       </div>
       <div className={styles.botomContainer}>

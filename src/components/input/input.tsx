@@ -30,6 +30,8 @@ const Input = (props: InputProps): JSX.Element => {
     setUserData(event.target.value);
   };
 
+  handleInputChange;
+
   useEffect(() => {
     setUserData(props.value);
   }, [props.value]);

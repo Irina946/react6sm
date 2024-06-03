@@ -4,16 +4,16 @@
             "name": "activeData",
             "content": [
                 {
-                    "title": "Фотограф",
-                    "value": "Photo"
+                    "name": "Фотограф",
+                    "id": "photo"
                 },
                 {
-                    "title": "Видеограф",
-                    "value": "Video"
+                    "name": "Видеограф",
+                    "id": "video"
                 },
                 {
-                    "title": "Модель",
-                    "value": "Model"
+                    "name": "Модель",
+                    "id": "model"
                 }
             ]
         },
@@ -21,52 +21,52 @@
             "name": "specializationData",
             "content": [
                 {
-                    "title": "Студийная",
-                    "value": "Studio"
+                    "name": "Студийная",
+                    "id": "Студийная"
                 },
                 {
-                    "title": "Уличная",
-                    "value": "Street"
+                    "name": "Уличная",
+                    "id": "Уличная"
                 },
                 {
-                    "title": "Детская",
-                    "value": "Childish"
+                    "name": "Детская",
+                    "id": "Детская"
                 },
                 {
-                    "title": "Свадебная",
-                    "value": "Wedding"
+                    "name": "Свадебная",
+                    "id": "Свадебная"
                 },
                 {
-                    "title": "Food",
-                    "value": "Food"
+                    "name": "Food",
+                    "id": "Food"
                 },
                 {
-                    "title": "Предметная",
-                    "value": "Subject"
+                    "name": "Предметная",
+                    "id": "Предметная"
                 },
                 {
-                    "title": "Fashion",
-                    "value": "Fashion"
+                    "name": "Fashion",
+                    "id": "Fashion"
                 },
                 {
-                    "title": "Архитектурная",
-                    "value": "Architectural"
+                    "name": "Архитектурная",
+                    "id": "Архитектурная"
                 },
                 {
-                    "title": "Репортажная",
-                    "value": "Reportage"
+                    "name": "Репортажная",
+                    "id": "Репортажная"
                 },
                 {
-                    "title": "Рекламная",
-                    "value": "Advertising"
+                    "name": "Рекламная",
+                    "id": "Рекламная"
                 },
                 {
-                    "title": "Ню",
-                    "value": "Nu"
+                    "name": "Ню",
+                    "id": "Ню"
                 },
                 {
-                    "title": "Life-style",
-                    "value": "Life-style"
+                    "name": "Life-style",
+                    "id": "Life-style"
                 }
             ]
         },
@@ -74,24 +74,24 @@
             "name": "experienceData",
             "content": [
                 {
-                    "title": "0-1",
-                    "value": "Beginner"
+                    "name": "0-1",
+                    "id": "Beginner"
                 },
                 {
-                    "title": "1-3",
-                    "value": "Beginner-Intermediate"
+                    "name": "1-3",
+                    "id": "Beginner-Intermediate"
                 },
                 {
-                    "title": "3-5",
-                    "value": "Intermediate"
+                    "name": "3-5",
+                    "id": "Intermediate"
                 },
                 {
-                    "title": "5-10",
-                    "value": "Intermediate-Advanced"
+                    "name": "5-10",
+                    "id": "Intermediate-Advanced"
                 },
                 {
-                    "title": "Более 10",
-                    "value": "Advanced"
+                    "name": "Более 10",
+                    "id": "Advanced"
                 }
             ]
         },
@@ -99,24 +99,24 @@
             "name": "ageData",
             "content": [
                 {
-                    "title": "18-25",
-                    "value": "18-25"
+                    "name": "18-25",
+                    "id": "18-25"
                 },
                 {
-                    "title": "25-35",
-                    "value": "25-35"
+                    "name": "25-35",
+                    "id": "25-35"
                 },
                 {
-                    "title": "35-45",
-                    "value": "35-45"
+                    "name": "35-45",
+                    "id": "35-45"
                 },
                 {
-                    "title": "55-65",
-                    "value": "55-65"
+                    "name": "55-65",
+                    "id": "55-65"
                 },
                 {
-                    "title": "65+",
-                    "value": "65"
+                    "name": "65+",
+                    "id": "65"
                 }
             ]
         }

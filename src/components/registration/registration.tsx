@@ -3,9 +3,7 @@ import Button from '../button/button';
 import Input from '../input/input';
 import styles from './registration.module.css'
 import { useState } from 'react';
-import { TUserSchema, sendNewUser } from '../../transport';
-
-
+import { TUserSchema, sendNewUser, setItem } from '../../transport';
 
 const RegistartionComponent = (): JSX.Element => {
   const navigate = useNavigate();
@@ -50,7 +48,7 @@ const RegistartionComponent = (): JSX.Element => {
     navigate('/lk-creating');
   }
 
-
+  setItem<string>('email', userEmail)
   return (
     <div
       className={styles.registrationContainer}

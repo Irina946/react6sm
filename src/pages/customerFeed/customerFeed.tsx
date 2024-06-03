@@ -51,7 +51,7 @@ export const CustomerFeed = (): JSX.Element => {
 
   const [theme, setTheme] = useState({ man: false, woman: false, any: false })
 
-  const onChangeTheme = (e) => {
+  const onChangeTheme = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name } = e.target
     if (name === 'man') {
       setTheme({ man: true, woman: false, any: false })
@@ -75,6 +75,8 @@ export const CustomerFeed = (): JSX.Element => {
           placeholder='Начните вводить'
           view='main'
           type='text'
+          value=''
+          onCahge={() => {}}
 
         />
         <DropDown

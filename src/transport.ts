@@ -15,6 +15,15 @@ export type TUserSchema = {
   picturesBase64: string[]
 }
 
+export function setItem<T>(key: string, value: T): void {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+export function getItem<T>(key: string): T | '' {
+  const item = localStorage.getItem(key);
+  return item ? JSON.parse(item) as T : '';
+}
+
 export async function sendUser(data: TUserSchema) {
   await fetch('http://localhost:3010/api/updateUser',
     {
@@ -23,18 +32,10 @@ export async function sendUser(data: TUserSchema) {
       headers: new Headers({ 'content-type': 'application/json' }),
     }
   )
-  console.log(data)
+  
 }
 
 export async function sendNewUser(data: TUserSchema) {
-  // const requestModel = {email: data.email}
-
-  // const answer = await fetch('http://localhost:3010/api/user', {
-  //   method: 'POST',
-  //   body: JSON.stringify(requestModel),
-  //   headers: new Headers({ 'content-type': 'application/json' })
-  // })
-  // console.log(answer)
   await fetch('http://localhost:3010/api/createUser',
     {
       method: 'POST',
@@ -42,4 +43,26 @@ export async function sendNewUser(data: TUserSchema) {
       headers: new Headers({ 'content-type': 'application/json' }),
     }
   )
+}
+
+export async function readUser(emailLocal: string) {
+  const requestModel = {email: emailLocal}
+
+  const answer = await fetch('http://localhost:3010/api/user', {
+    method: 'POST',
+    body: JSON.stringify(requestModel),
+    headers: new Headers({ 'content-type': 'application/json' })
+  })
+  return answer.json()
+}
+
+
+export async function deleetUser(emailLocal: string) {
+  const requestModel = {email: emailLocal}
+
+  await fetch('http://localhost:3010/api/deleteUser', {
+    method: 'POST',
+    body: JSON.stringify(requestModel),
+    headers: new Headers({ 'content-type': 'application/json' })
+  })
 }
