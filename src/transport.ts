@@ -24,8 +24,10 @@ export function getItem<T>(key: string): T | {email: string} {
   return item ? JSON.parse(item) as T : {email: 'none'};
 }
 
+const URL = 'http://localhost:3010'
+
 export async function sendUser(data: TUserSchema) {
-  await fetch('http://localhost:3010/api/updateUser',
+  await fetch(`${URL}/api/updateUser`,
     {
       method: 'POST',
       body: JSON.stringify(data),
@@ -36,7 +38,7 @@ export async function sendUser(data: TUserSchema) {
 }
 
 export async function sendNewUser(data: TUserSchema) {
-  await fetch('http://localhost:3010/api/createUser',
+  await fetch(`${URL}/api/createUser`,
     {
       method: 'POST',
       body: JSON.stringify(data),
@@ -48,7 +50,7 @@ export async function sendNewUser(data: TUserSchema) {
 export async function readUser(emailLocal: string) {
   const requestModel = {email: emailLocal}
 
-  const answer = await fetch('http://localhost:3010/api/user', {
+  const answer = await fetch(`${URL}/api/user`, {
     method: 'POST',
     body: JSON.stringify(requestModel),
     headers: new Headers({ 'content-type': 'application/json' })
@@ -60,7 +62,7 @@ export async function readUser(emailLocal: string) {
 export async function deleetUser(emailLocal: string) {
   const requestModel = {email: emailLocal}
 
-  await fetch('http://localhost:3010/api/deleteUser', {
+  await fetch(`${URL}/api/deleteUser`, {
     method: 'POST',
     body: JSON.stringify(requestModel),
     headers: new Headers({ 'content-type': 'application/json' })
@@ -69,7 +71,7 @@ export async function deleetUser(emailLocal: string) {
 
 
 export async function readlAllUsers() {
-  const users = await fetch('http://localhost:3010/api/userAll', {
+  const users = await fetch(`${URL}/api/userAll`, {
     method: 'POST'
   })
 
