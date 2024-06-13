@@ -19,7 +19,9 @@ type SelectProps = {
   onClose?: () => void;
   label: string;
   size?: 'small';
-  view?: 'main'
+  view?: 'main';
+  error?: boolean;
+  errorMessage?: string
 };
 
 type OptionProps = {
@@ -72,6 +74,8 @@ const Option = (props: OptionProps): JSX.Element => {
 }
 
 const DropDown = (props: SelectProps): JSX.Element => {
+  const errorModule = props.error ? styles.error : ''
+  const displayNone = !props.error ? styles.displayNone : ''
   const {
     mode = 'rows',
     options,
@@ -134,40 +138,41 @@ const DropDown = (props: SelectProps): JSX.Element => {
   };
 
   return (
-    <div className={clsx(styles.label, color)}>
+    <div className={clsx(styles.label, color, errorModule)}>
       {label}
       <div
-      className={clsx(styles.selectWrapper, small)}
-      ref={rootRef}
-      data-is-active={isOpen}
-      data-mode={mode}
-    >
-      <div className={styles.arrow}>
-        <img src={typeView} />
-      </div>
-      <div
-        className={clsx(styles.placeholder, color)}
-        data-status={status}
-        data-selected={!!selected?.id}
-        onClick={handlePlaceHolderClick}
-        role='button'
-        tabIndex={0}
-        ref={placeholderRef}
+        className={clsx(styles.selectWrapper, small, errorModule)}
+        ref={rootRef}
+        data-is-active={isOpen}
+        data-mode={mode}
       >
-        {selected?.name || placeholder}
+        <div className={styles.arrow}>
+          <img src={typeView} />
+        </div>
+        <div
+          className={clsx(styles.placeholder, color, errorModule)}
+          data-status={status}
+          data-selected={!!selected?.id}
+          onClick={handlePlaceHolderClick}
+          role='button'
+          tabIndex={0}
+          ref={placeholderRef}
+        >
+          {selected?.name || placeholder}
+        </div>
+        {isOpen && (
+          <ul className={styles.select}>
+            {options.map((option) => (
+              <Option
+                key={option.id}
+                option={option}
+                onClick={handleOptionClick}
+              />
+            ))}
+          </ul>
+        )}
       </div>
-      {isOpen && (
-        <ul className={styles.select}>
-          {options.map((option) => (
-            <Option
-              key={option.id}
-              option={option}
-              onClick={handleOptionClick}
-            />
-          ))}
-        </ul>
-      )}
-    </div>
+      <div className={clsx(styles.errorMessage, displayNone)}>{props.errorMessage}</div>
     </div>)
 }
 

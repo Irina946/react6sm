@@ -3,41 +3,82 @@ import Button from '../button/button';
 import Input from '../input/input';
 import styles from './registration.module.css'
 import { useEffect, useState } from 'react';
-import { TUserSchema, readUser, sendNewUser, setItem } from '../../transport';
+import { TUserSchema, encodePassword, setItem } from '../../transport';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store';
+import { sendNewUser } from '../../redux/features/userSlice';
 
 const RegistartionComponent = (): JSX.Element => {
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const status = useSelector((state: RootState) => state.user.status);
 
   const [userName, setUserName] = useState('')
   const [userEmail, setUserEmail] = useState('')
   const [userPassword, setUserPassword] = useState('')
   const [userDoublePassword, setuserDoublePassword] = useState('')
-  const answer = { message: 'User not found' }
-  const [precenceUser, setPrecenceUser] = useState(false)
-  useEffect(() => {
-    const dataFromBD = readUser(userEmail)
-    dataFromBD?.then(result => {
-      setPrecenceUser(JSON.stringify(result) === JSON.stringify(answer))
-    }).catch(error => {
-      console.log(error)
-    });
-  }, [userEmail]);
 
-  const errorPassword = userPassword !== userDoublePassword || userPassword.length < 8 || userPassword.length > 16;
-  const errorDoublePassword = userPassword !== userDoublePassword;
-  const errorName = userName === '';
-  const errorEmail = userEmail === '' || !precenceUser;
+  const errorPassword = userPassword.length > 0
+    && ((userPassword !== userDoublePassword && userDoublePassword.length > 0)
+      || userPassword.length < 8
+      || userPassword.length > 16);
+  const errorDoublePassword = userDoublePassword.length > 0 && userPassword !== userDoublePassword;
+  const errorEmail = userEmail.length > 0 && (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(userEmail));
 
-  const errorMessagePassword = userPassword.length < 8 ? 'Меньше 8 символов'
+  const errorMessagePassword = userPassword.length < 8 && userPassword.length > 0 ? 'Меньше 8 символов'
     : userPassword.length > 16 ? 'Больше 8 символов'
-      : userPassword !== userDoublePassword ? 'Пароли не совпадают'
+      : userPassword !== userDoublePassword && userPassword.length > 0 && userDoublePassword.length > 0 ? 'Пароли не совпадают'
         : '';
-  const errorMessageDoublePassword = userPassword !== userDoublePassword ? 'Пароли не совпадают' : ''
-  const errorMessageName = 'Введите имя'
-  const errorMessageEmail = userEmail === '' ? 'Введите email' : !precenceUser ? 'Такой пользователь существует' : ''
+  const errorMessageDoublePassword = userPassword !== userDoublePassword && userDoublePassword.length > 0 ? 'Пароли не совпадают' : ''
+  const errorMessageEmail = (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(userEmail)) && userEmail.length > 0 ? 'Некорректный e-mail' : ''
+  const [er, setEr] = useState<{
+    userName?: string,
+    userEmail?: string,
+    userPassword?: string,
+    userDoublePassword?: string
+  }>({})
+
+  const validateRegistrationForm = (userName: string, userEmail: string, userPassword: string, userDoublePassword: string) => {
+    const errors: {
+      userName?: string;
+      userEmail?: string;
+      userPassword?: string;
+      userDoublePassword?: string;
+    } = {};
+
+    if (!userName) {
+      errors.userName = 'Введите имя';
+    }
+
+    if (!userEmail) {
+      errors.userEmail = 'Введите email';
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(userEmail)) {
+      errors.userEmail = 'Некорректный email';
+    }
+
+    if (!userPassword) {
+      errors.userPassword = 'Введите пароль';
+    } else if (userPassword.length < 8) {
+      errors.userPassword = 'Меньше 8 символов';
+    } else if (userPassword.length > 16) {
+      errors.userPassword = 'Больше 16 символов';
+    }
+
+    if (!userDoublePassword) {
+      errors.userDoublePassword = 'Повторите пароль';
+    } else if (userDoublePassword !== userPassword) {
+      errors.userDoublePassword = 'Пароли не совпадают';
+    }
+
+    setEr(errors)
+
+    return errors;
+  };
+
+
 
   const Data: TUserSchema = {
-    passwordHash: userPassword,
+    passwordHash: encodePassword(userPassword),
     photoBase64: '',
     coverBase64: '',
     name: userName,
@@ -49,14 +90,25 @@ const RegistartionComponent = (): JSX.Element => {
     price: 0,
     sex: '',
     experience: '',
-    aboutMe: 'string',
+    aboutMe: '',
     picturesBase64: []
   }
 
+  useEffect(() => {
+    if (status === 'succeeded') {
+      setItem<string>('email', userEmail);
+      navigate('/lk-creating');
+    } else if (status === 'failed') {
+      setEr(prev => ({ ...prev, userEmail: 'Такой пользователь уже существует' }));
+    }
+  }, [status, navigate, userEmail]);
+
   const handleButtonClick = () => {
-    sendNewUser(Data)
-    navigate('/lk-creating');
-  }
+    const errors = validateRegistrationForm(userName, userEmail, userPassword, userDoublePassword);
+    if (Object.keys(errors).length === 0) {
+      dispatch(sendNewUser(Data));
+    }
+  };
 
   setItem<string>('email', userEmail)
   return (
@@ -79,8 +131,9 @@ const RegistartionComponent = (): JSX.Element => {
           type='text'
           value={userName}
           onCahge={event => setUserName(event.target.value)}
-          error={errorName}
-          errorMessage={errorMessageName}
+          error={er.userName !== undefined}
+          errorMessage={er.userName}
+          required={true}
         />
         <Input
           id="email"
@@ -89,18 +142,20 @@ const RegistartionComponent = (): JSX.Element => {
           type='email'
           value={userEmail}
           onCahge={event => setUserEmail(event.target.value)}
-          error={errorEmail}
-          errorMessage={errorMessageEmail}
+          error={errorEmail || er.userEmail !== undefined}
+          errorMessage={er.userEmail || errorMessageEmail}
+          required={true}
         />
         <Input
           id="password"
           label="Придумайте пароль"
-          placeholder='Пароль содержит 6 знаков'
+          placeholder='Пароль содержит 8 знаков'
           type='password'
           value={userPassword}
           onCahge={event => setUserPassword(event.target.value)}
-          error={errorPassword}
-          errorMessage={errorMessagePassword}
+          error={errorPassword || er.userPassword !== undefined}
+          errorMessage={er.userPassword || errorMessagePassword}
+          required={true}
         />
         <Input
           id="passwordRepeat"
@@ -109,8 +164,9 @@ const RegistartionComponent = (): JSX.Element => {
           type='password'
           value={userDoublePassword}
           onCahge={event => setuserDoublePassword(event.target.value)}
-          error={errorDoublePassword}
-          errorMessage={errorMessageDoublePassword}
+          error={errorDoublePassword || er.userDoublePassword !== undefined}
+          errorMessage={er.userDoublePassword || errorMessageDoublePassword}
+          required={true}
         />
         <div
           className={styles.text}

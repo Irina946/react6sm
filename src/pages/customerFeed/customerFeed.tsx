@@ -7,8 +7,12 @@ import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 import { RadioButton } from '../../components/checkbox/checkbox'
 import Button from '../../components/button/button'
-import { TUserSchema, readlAllUsers } from '../../transport'
+import { TUserSchema } from '../../transport'
 import { UserCard, calculateAge } from '../../components/userCard/userCard'
+import { useDispatch, useSelector } from 'react-redux'
+import { readAllUsers } from '../../redux/features/userSlice'
+import { AppDispatch, RootState } from '../../redux/store'
+
 
 type SearchSchema = {
   location: string,
@@ -22,6 +26,7 @@ type SearchSchema = {
   },
   age: string
 }
+
 
 export const CustomerFeed = (): JSX.Element => {
 
@@ -55,7 +60,7 @@ export const CustomerFeed = (): JSX.Element => {
   const selectedExperience = experienceData.content.find((item) => item.id === experience)
   const selectedAge = ageData.content.find((item) => item.id === age)
 
-  const [rangeValues, setRangeValues] = useState({ min: 10000, max: 100000 });
+  const [rangeValues, setRangeValues] = useState({ min: 250, max: 15000 });
 
   const handleRangeChange = (value: number | number[]) => {
     if (Array.isArray(value)) {
@@ -82,15 +87,20 @@ export const CustomerFeed = (): JSX.Element => {
 
 
   const [usersList, setUsersList] = useState<TUserSchema[]>([])
+  const [usersFiltred, setUsersFiltred] = useState<TUserSchema[]>([])
+
+  const dispatch: AppDispatch = useDispatch();
+  const users = useSelector((state: RootState) => state.user.users);
+  const status = useSelector((state: RootState) => state.user.status);
 
   useEffect(() => {
-    const dataFromBD = readlAllUsers()
-    dataFromBD?.then(result => {
-      setUsersList(result)
-    }).catch(error => {
-      console.log(error)
-    });
-  }, []);
+    if (status === 'idle') {
+      dispatch(readAllUsers());
+    }
+    setUsersList(users);
+    setUsersFiltred(users)
+  }, [status, dispatch, users]);
+
 
   const Data: SearchSchema = {
     location: location,
@@ -103,44 +113,21 @@ export const CustomerFeed = (): JSX.Element => {
   }
 
   const filterItems = () => {
-    const filtered = usersList.filter(item => item.price >= rangeValues.min && item.price <= rangeValues.max)
-    setUsersList(filtered);
-    if (active !== '') {
-      const filtered = usersList.filter(item =>
-        item.activity.indexOf(active) !== -1
+    const ageArray = age.split('-')
+    const ageMin = Number(ageArray[0])
+    const ageMax = Number(ageArray[1])
+    const filtered = usersList.filter(item => {
+      return (
+        (item.price >= rangeValues.min && item.price <= rangeValues.max) &&
+        (active === '' || item.activity.indexOf(active) !== -1) &&
+        (specialization === '' || item.specialization.indexOf(specialization) !== -1) &&
+        (location === '' || item.location === location) &&
+        (experience === '' || item.experience === Data.experience) &&
+        (sex === 'any' || item.sex === sex) &&
+        (age === '' || (calculateAge(item.dateBirthday) >= ageMin && calculateAge(item.dateBirthday) <= ageMax))
       );
-      setUsersList(filtered);
-    }
-    if (specialization !== '') {
-      const filtered = usersList.filter(item =>
-        item.specialization.indexOf(specialization) !== -1)
-      setUsersList(filtered);
-    }
-    if (location !== '') {
-      const filtered = usersList.filter(item =>
-        item.location === location)
-      setUsersList(filtered);
-    }
-    if (experience !== '') {
-      const filtered = usersList.filter(item =>
-        item.experience === Data.experience)
-      setUsersList(filtered);
-    }
-    if (sex !== 'any') {
-      const filtered = usersList.filter(item =>
-        item.sex === sex)
-      setUsersList(filtered);
-    }
-    if (age !== '') {
-      const ageArray = age.split('-')
-      const ageMin = Number(ageArray[0])
-      const ageMax = Number(ageArray[1])
-      const filtered = usersList.filter(item =>
-        calculateAge(item.dateBirthday) >= ageMin
-        && calculateAge(item.dateBirthday) <= ageMax)
-      setUsersList(filtered);
-    }
-    setUsersList(filtered);
+    });
+    setUsersFiltred(filtered);
   }
 
 
@@ -213,8 +200,8 @@ export const CustomerFeed = (): JSX.Element => {
           <div className={styles.sliderContainer}>
             Цена
             <Slider
-              min={1000}
-              max={100000}
+              min={250}
+              max={15000}
               step={500}
               range
               defaultValue={[rangeValues.min, rangeValues.max]}
@@ -246,10 +233,15 @@ export const CustomerFeed = (): JSX.Element => {
           />
         </div>
       </div>
-      <div className={styles.users_container}>
-        {usersList.map((user, id) => (
-          <UserCard user={user} key={id} />
-        ))}
+      <div className={styles.bottomContainer}>
+        <div className={styles.users_container}>
+          {usersFiltred.map((user, id) => (
+
+            <UserCard user={user} key={id} />
+
+          ))}
+
+        </div>
       </div>
     </>
   )

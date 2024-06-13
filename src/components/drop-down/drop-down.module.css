@@ -121,8 +121,24 @@
   color: #FFFFFF;
 }
 
-.colorMain .placeholder[data-status="default"]{
+.colorMain .placeholder[data-status="default"] {
   border-bottom: 1px solid #FFFFFF;
   color: #FFFFFF;
   font-size: 14px;
+}
+
+.error {
+  color: #F02222;
+  border-color: #F02222;
+}
+
+.errorMessage {
+  display: block;
+  color: #F02222;
+  font-size: 12px;
+  margin-top: -18px;
+}
+
+.displayNone {
+  display: none;
 }

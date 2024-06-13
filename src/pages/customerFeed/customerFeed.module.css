@@ -4,8 +4,8 @@
     background-repeat: no-repeat;
     background-size:100% 100%;
     padding-top: 90px;
-    padding-left: 300px;
-    width: calc(98.8vw - 300px);
+    padding-left: 18%;
+    width: calc(98.8vw - 18%);
     height: 360px;
     font-size: 30px;
     font-weight: 300;
@@ -14,14 +14,16 @@
 
 .containerSearchInside {
     position: absolute;
-    left: 20%;
+    left: 18%;
     top: 25%;
     width: 905px;
     height: 190px;
     background-color: rgba(73, 200, 200, 0.5);
     backdrop-filter: blur(5px);
     margin-top: 20px;
+    
     padding: 30px;
+    padding-bottom: 5px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -48,8 +50,23 @@
 }
 
 .users_container {
-    padding: 50px 20px;
-    padding-left: 300px;
     display: flex;
+    justify-content: flex-start;
     gap: 20px;
+    flex-wrap: wrap;
 }
+
+.bottomContainer {
+    padding: 50px 18%;
+    padding-left: 20%;
+    gap: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-weight: 700;
+    font-size: 24px;
+    color: #828282;
+}
+
+

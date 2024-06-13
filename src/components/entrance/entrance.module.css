@@ -1,6 +1,5 @@
 .entarnceContainer {
     display: flex;
-    width: 30vw;
     height: auto;
     background-color: #FFFFFF;
     filter: drop-shadow(4px 0px 20px rgba(0, 0, 0, 0.25));

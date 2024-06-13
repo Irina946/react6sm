@@ -1,3 +1,5 @@
+import * as CryptoJS from 'crypto-js';
+
 export type TUserSchema = {
   passwordHash: string,
   photoBase64: string,
@@ -15,6 +17,20 @@ export type TUserSchema = {
   picturesBase64: string[]
 }
 
+export const encodePassword = (password: string): string => {
+  const key = 'my_secret_key';
+  const iv = CryptoJS.enc.Utf8.parse('my_initialization_vector');
+  const encrypted = CryptoJS.TripleDES.encrypt(password, key, { iv: iv });
+  return encrypted.toString()
+};
+
+export const decodedPassword = (password: string) => {
+  const key = 'my_secret_key';
+  const iv = CryptoJS.enc.Utf8.parse('my_initialization_vector');
+  const decrypted = CryptoJS.TripleDES.decrypt(password, key, { iv: iv });
+  return decrypted.toString()
+};
+
 export function setItem<T>(key: string, value: T): void {
   localStorage.setItem(key, JSON.stringify(value));
 }
@@ -24,56 +40,3 @@ export function getItem(key: string): string {
   return item ? JSON.parse(item) as string : 'none';
 }
 
-const URL = 'http://84.201.130.181:3010'
-
-export async function sendUser(data: TUserSchema) {
-  await fetch(`${URL}/api/updateUser`,
-    {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: new Headers({ 'content-type': 'application/json' }),
-    }
-  )
-
-}
-
-export async function sendNewUser(data: TUserSchema) {
-  await fetch(`${URL}/api/createUser`,
-    {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: new Headers({ 'content-type': 'application/json' }),
-    }
-  )
-}
-
-export async function readUser(emailLocal: string) {
-  const requestModel = { email: emailLocal }
-
-  const answer = await fetch(`${URL}/api/user`, {
-    method: 'POST',
-    body: JSON.stringify(requestModel),
-    headers: new Headers({ 'content-type': 'application/json' })
-  })
-  return answer.json()
-}
-
-
-export async function deleetUser(emailLocal: string) {
-  const requestModel = { email: emailLocal }
-
-  await fetch(`${URL}/api/deleteUser`, {
-    method: 'POST',
-    body: JSON.stringify(requestModel),
-    headers: new Headers({ 'content-type': 'application/json' })
-  })
-}
-
-
-export async function readlAllUsers() {
-  const users = await fetch(`${URL}/api/userAll`, {
-    method: 'POST'
-  })
-
-  return users.json()
-}

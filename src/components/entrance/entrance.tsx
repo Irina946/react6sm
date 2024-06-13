@@ -3,47 +3,42 @@ import Button from '../button/button';
 import Input from '../input/input';
 import styles from './entrance.module.css'
 import { useEffect, useState } from 'react';
-import { type TUserSchema, readUser, setItem } from '../../transport';
-
-interface AnswerNotFound {
-  message: string;
-}
+import { setItem, decodedPassword } from '../../transport';
+import { AppDispatch, RootState } from '../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { readUser } from '../../redux/features/userSlice';
 
 const EntarnceComponent = (): JSX.Element => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.user);
+  const status = useSelector((state: RootState) => state.user.status);
 
-  const [userEmail, setUserEmail] = useState('')
-  const [userPassword, setUserPassword] = useState('')
-  const answer = { message: 'User not found' }
-  const [precenceUser, setPrecenceUser] = useState(false)
-  const [userFromBD, setUserFromBD] = useState<TUserSchema | AnswerNotFound>()
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+  const [errorEmail, setErrorEmail] = useState(false);
+  const [errorPassword, setErrorPassword] = useState(false);
+  const errorMessageEmail = 'Такого пользователя не существует';
+
   useEffect(() => {
-    const dataFromBD = readUser(userEmail)
-    dataFromBD?.then(result => {
-      setPrecenceUser(JSON.stringify(result) === JSON.stringify(answer))
-      setUserFromBD(result)
-    }).catch(error => {
-      console.log(error)
-    });
-  }, [userEmail]);
-  const [errorEmail, setErrorEmail] = useState(false)
-  const [errorPassword, setErrorPassword] =useState(false) 
-  const errorMessageEmail = 'Такого пользователя не существует'
+    if (status === 'succeeded') {
+      if (user !== null && decodedPassword(user.passwordHash) === userPassword) {
+        navigate('/lk-creating');
+        setItem<string>('email', userEmail);
+        setErrorEmail(false);
+        setErrorPassword(false);
+      } else {
+        setErrorPassword(true);
+      }
+    } else if (status === 'failed') {
+      setErrorEmail(true);
+    }
+  }, [status, user, userPassword, navigate, userEmail]);
 
   const handleButtonClickEntrance = (): void => {
-    if (!precenceUser) {
-      if ('passwordHash' in userFromBD! && userFromBD.passwordHash === userPassword)  {
-        navigate('/lk-creating')
-        setItem<string>('email', userEmail)
-      } else {
-        setErrorPassword(true)
-      }
-    } 
-    if (precenceUser) {
-      setErrorEmail(true)
-    }
-  }
-  
+    dispatch(readUser(userEmail));
+  };
+
   return (
     <div
       className={styles.entarnceContainer}

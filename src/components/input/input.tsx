@@ -12,6 +12,7 @@ interface InputProps {
   type: string
   view?: 'main'
   value: string | ''
+  required?: boolean
   onCahge: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -54,6 +55,7 @@ const Input = (props: InputProps): JSX.Element => {
         type={props.type}
         value={userData}
         onChange={props.onCahge}
+        required={props.required}
       />
       <div className={stylesErrorMessage}>{props.errorMessage}</div>
     </label>

@@ -111,5 +111,17 @@
 }
 
 .multiselectContainer {
-    width: 550px;
+    width: 310px;
+    color: #49C8C8;
+    margin-bottom: 20px;
+}
+
+.multiselectContainer li:hover {
+    width: 310px;
+    background: #49C8C8 !important;
+}
+
+.errorMessageMulty {
+    color: #F02222;
+    font-size: 12px;
 }

@@ -6,11 +6,10 @@ export const CreatingProfile = (): JSX.Element => {
     <div className={styles.CreatingProfileContainer}>
       <div>
         <div className={styles.headerContainer}>
-          Создание профиля
+          Редактирование профиля
         </div>
         <CreatingProfileComponent />
       </div>
-
     </div>
   )
 }

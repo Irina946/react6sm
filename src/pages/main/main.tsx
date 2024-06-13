@@ -3,6 +3,7 @@ import styles from './main.module.css'
 import Button from '../../components/button/button'
 
 export const Main = (): JSX.Element => {
+  localStorage.clear()
   return (
     <div className={styles.MainContainer}>
       <div className={styles.leftContainer}>

@@ -1,5 +1,9 @@
+import { useState } from 'react';
 import { TUserSchema } from '../../transport';
+import { ActivityBlock } from '../activityBlock/activityBlock';
 import styles from './user-card.module.css';
+import Modal from 'react-modal'
+import { CreatingUserProfile } from '../../pages/CreatingUserProfile/CreatingUserProfile';
 
 interface UserCardProps {
   user: TUserSchema
@@ -31,37 +35,76 @@ function getAgeString(age: number) {
   }
 }
 
-export const UserCard = (props: UserCardProps) => {
 
+
+export const UserCard = (props: UserCardProps) => {
+  const [modalOpen, setOpenModal] = useState(false);
   const { user } = props;
 
   const fullAge: number = calculateAge(user.dateBirthday);
   return (
-    <div className={styles.container}>
-      <img src={user.photoBase64} alt='user avatar' className={styles.user_avatar} />
-      <div className={styles.main_container}>
-        <span className={styles.user_name}>{user.name}</span>
-        <div className={styles.activity_container}>
-          {user.activity.map((activity: string, id: number) => (
-            <span className={styles.standart_span} key={id}>{activity}</span>
-          ))}
+    <>
+      <button
+        className={styles.container}
+        onClick={() => setOpenModal(true)}
+      >
+        <img
+          src={user.photoBase64}
+          alt='user avatar'
+          className={styles.user_avatar}
+        />
+        <div className={styles.main_container}>
+          <span className={styles.user_name}>
+            {user.name}
+          </span>
+          <div className={styles.activity_container}>
+            {user.activity.map((activity: string, id: number) => (
+              <span
+                className={styles.standart_span}
+                key={id}>
+                <ActivityBlock activity={activity} />
+              </span>
+            ))}
+          </div>
+          <div className={styles.location_cotnainer}>
+            <span className={styles.location_span}>
+              {user.location}
+            </span>
+          </div>
+          <span className={styles.standart_span}>
+            Возраст: {getAgeString(fullAge)}
+          </span>
+          <div className={styles.price_container}>
+            <span className={styles.standart_span}>
+              Час работы: {user.price}&#8381;
+            </span>
+          </div>
+          <div className={styles.email_container}>
+            <a
+              className={styles.email_link}
+              href={`mailto:${user.email}`}
+              title='Написать на почту'>
+              {user.email}
+            </a>
+          </div>
         </div>
-        <div className={styles.location_cotnainer}>
-          <span className={styles.location_span}>{user.location}</span>
-        </div>
-        <span className={styles.standart_span}>Возраст: {getAgeString(fullAge)}</span>
-        <div className={styles.price_container}>
-          <span className={styles.standart_span}>Час работы: {user.price}&#8381;</span>
-        </div>
-        <div className={styles.email_container}>
-          <a
-            className={styles.email_link}
-            href={`mailto:${user.email}`}
-            title='Написать на почту'>
-            {user.email}
-          </a>
-        </div>
-      </div>
-    </div>
+      </button>
+      <Modal
+        isOpen={modalOpen}
+        onRequestClose={() => setOpenModal(false)}
+        shouldCloseOnEsc={true}
+        shouldCloseOnOverlayClick={true}
+        ariaHideApp={false}
+        style={{
+          overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.75)'
+          }
+        }}
+        className={styles.modalProfile}
+      >
+        <CreatingUserProfile data={user} />
+      </Modal>
+
+    </>
   )
 }
